@@ -80,9 +80,6 @@
             transition: background-color 0.3s;
             font-size: 1rem;
         }
-        .button:hover {
-            background-color: #1e40af; 
-        }
         .button:disabled {
             background-color: #9ca3af;
             cursor: not-allowed;
@@ -319,13 +316,13 @@
             lookupInterface.style.display = 'none';
             lookupButton.disabled = true;
             try {
-                const response = await fetch('microchip_data.json');
+                // Use './' for an explicit relative path from the current directory
+                const response = await fetch('./microchip_data.json'); 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
                 }
                 manufacturersData = await response.json();
                 
-                // Process aliases and sort data
                 manufacturersData.forEach(item => {
                     if (item._aliasFor) {
                         const target = manufacturersData.find(targetItem => targetItem.prefix === item._aliasFor);
@@ -362,6 +359,7 @@
             } catch (error) {
                 console.error("Failed to load microchip data:", error);
                 dataLoadingMessage.style.display = 'none';
+                dataErrorMessage.textContent = `Error loading microchip data: ${error.message}. Please try refreshing the page. Ensure 'microchip_data.json' is in the same directory as index.html.`;
                 dataErrorMessage.style.display = 'block';
             }
         }
@@ -536,7 +534,6 @@
                     });
                 } else {
                     notFoundMessageDiv.style.display = 'block';
-                    // Check for potential country code if no match and not starting with 9 or AVID
                     if (!chipNumber.startsWith('9') && !chipNumber.startsWith('AVID') && 
                         !['000','0A0','0A1','0D0D','1','4','7E1','9A1','TR'].some(p => chipNumber.startsWith(p))) {
                         countryCodeSuggestionDiv.style.display = 'block';
@@ -548,13 +545,12 @@
         microchipInput.addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault(); 
-                if (!lookupButton.disabled) { // Only click if button is enabled
+                if (!lookupButton.disabled) { 
                     lookupButton.click();
                 }
             }
         });
 
-        // Load data on page load
         loadMicrochipData();
     </script>
 </body>
