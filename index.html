@@ -285,7 +285,7 @@
         
         <div class="info-box mt-8">
             <p><strong>Important:</strong> This tool provides potential manufacturer information based on prefixes. For actual pet registration details and to find an owner, you <strong>MUST</strong> use a comprehensive lookup service like the <a href="https://www.petmicrochiplookup.org" target="_blank" rel="noopener noreferrer">AAHA Universal Pet Microchip Lookup</a>.</p>
-            <p class="mt-1">Data based on "MICROCHIP FORMAT GUIDE" (MicrochipHelp.com / Lost Dogs of America, updated 02/04/2025).</p>
+            <p class="mt-1">Data based on "MICROCHIP FORMAT GUIDE" by <a href="http://www.microchiphelp.com" target="_blank" rel="noopener noreferrer" class="underline">MicrochipHelp.com</a> / Lost Dogs of America (updated 02/04/2025). For questions about the guide, contact: Team@microchiphelp.com.</p>
         </div>
     </div>
 
@@ -316,7 +316,6 @@
             lookupInterface.style.display = 'none';
             lookupButton.disabled = true;
             try {
-                // Use './' for an explicit relative path from the current directory
                 const response = await fetch('./microchip_data.json'); 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
