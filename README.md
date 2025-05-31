@@ -1,7 +1,7 @@
 # Universal-Pet-Microchip-Lookup-Tool
 ## Description
 This web application helps identify potential manufacturers or issuing companies of a pet's microchip based on its number format (prefix). It is designed as a quick reference tool for individuals trying to determine the origin of a microchip, such as veterinary staff, shelter workers, or concerned citizens who have found a lost pet.
-The data used in this tool is meticulously transcribed from the "MICROCHIP FORMAT GUIDE" provided by MicrochipHelp.com and Lost Dogs of America (last known update: February 4, 2025).
+The data used in this tool is meticulously transcribed from the ["MICROCHIP FORMAT GUIDE"](https://www.microchiphelp.com/uploads/9/9/7/3/9973230/format_03-29-2025.pdf) provided by MicrochipHelp.com and Lost Dogs of America (last known update: February 4, 2025).
 IMPORTANT: This tool DOES NOT check live pet registration databases and CANNOT provide pet owner information. It only suggests the likely manufacturer or brand based on the chip's prefix.
 ## How to Use
  * Clone this repository or download the files.
