@@ -10,10 +10,10 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* Lighter gray background */
+            background-color: #f3f4f6; 
         }
         .container {
-            max-width: 750px; /* Slightly wider for more info */
+            max-width: 750px; 
             margin: 2rem auto;
             padding: 2rem;
             background-color: white;
@@ -21,24 +21,30 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
         .title {
-            font-size: 2rem; /* Larger title */
+            font-size: 2rem; 
             font-weight: 700;
-            color: #1e40af; /* Deeper blue */
+            color: #1e40af; 
             margin-bottom: 2rem;
             text-align: center;
         }
         .input-label {
-            font-weight: 600; /* Bolder label */
+            font-weight: 600; 
             color: #374151;
             margin-bottom: 0.5rem;
             display: block;
         }
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
         .input-field {
             width: 100%;
-            padding: 0.875rem 1.125rem; /* More padding */
+            padding: 0.875rem 1.125rem; 
+            padding-right: 3rem; /* Space for clear button */
             border: 1px solid #d1d5db;
             border-radius: 8px;
-            margin-bottom: 1.25rem;
             transition: border-color 0.3s, box-shadow 0.3s;
             font-size: 1rem;
         }
@@ -47,10 +53,25 @@
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
             outline: none;
         }
+        .clear-button {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 0.25rem;
+            display: none; /* Hidden by default */
+        }
+        .clear-button:hover {
+            color: #1f2937;
+        }
         .button {
             width: 100%;
             padding: 0.875rem 1rem;
-            background-color: #1d4ed8; /* Standard blue */
+            background-color: #1d4ed8; 
             color: white;
             font-weight: 600;
             border: none;
@@ -60,18 +81,32 @@
             font-size: 1rem;
         }
         .button:hover {
-            background-color: #1e40af; /* Darker on hover */
+            background-color: #1e40af; 
+        }
+        .action-button { /* For copy button */
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            background-color: #e0e7ff;
+            color: #3730a3;
+            border: 1px solid #c7d2fe;
+            margin-left: 0.5rem;
+        }
+        .action-button:hover {
+            background-color: #c7d2fe;
         }
         .results-area {
             margin-top: 2.5rem;
         }
         .results-title {
-            font-size: 1.5rem; /* Prominent results title */
+            font-size: 1.5rem; 
             font-weight: 600;
             color: #1e40af;
             margin-bottom: 1.5rem;
             border-bottom: 2px solid #e5e7eb;
             padding-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .result-entry {
             background-color: #f9fafb;
@@ -80,7 +115,7 @@
             margin-bottom: 1.25rem;
             border: 1px solid #e5e7eb;
         }
-        .result-entry h3 { /* Brand/Company Name */
+        .result-entry h3 { 
             font-size: 1.25rem;
             font-weight: 600;
             color: #111827;
@@ -96,10 +131,10 @@
             color: #1f2937;
             font-weight: 500;
         }
-        .result-item i { /* Icons */
+        .result-item i { 
             margin-right: 0.5rem;
             color: #3b82f6;
-            width: 16px; /* Ensure icon alignment */
+            width: 16px; 
             text-align: center;
         }
         .result-item a {
@@ -119,7 +154,7 @@
             margin-bottom: 0.375rem;
         }
         .error-message, .warning-message {
-            color: #c81e1e; /* Stronger red */
+            color: #c81e1e; 
             font-weight: 500;
             margin-top: 0.5rem;
             padding: 0.75rem;
@@ -150,7 +185,7 @@
             text-decoration: underline;
         }
         .loader {
-            border: 5px solid #e5e7eb; /* Thicker loader */
+            border: 5px solid #e5e7eb; 
             border-top: 5px solid #3b82f6;
             border-radius: 50%;
             width: 30px;
@@ -170,6 +205,11 @@
             border-radius: 4px;
             color: #3730a3;
         }
+        .copy-feedback {
+            font-size: 0.75rem;
+            color: #16a34a; /* Green */
+            margin-left: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -178,8 +218,13 @@
         
         <div>
             <label for="microchipNumber" class="input-label">Enter Microchip Number (9-15 characters):</label>
-            <input type="text" id="microchipNumber" class="input-field" placeholder="e.g., 985123456789012 or AVID123456789">
-            <div id="inputError" class="error-message" style="display: none;"></div>
+            <div class="input-wrapper">
+                <input type="text" id="microchipNumber" class="input-field" placeholder="e.g., 985123456789012 or AVID123456789">
+                <button id="clearInputButton" class="clear-button" title="Clear input">
+                    <i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+            <div id="inputError" class="error-message" style="display: none;" aria-live="polite"></div>
         </div>
 
         <button id="lookupButton" class="button">
@@ -187,8 +232,14 @@
         </button>
         <div id="loader" class="loader"></div>
 
-        <div id="resultsArea" class="results-area" style="display: none;">
-            <h2 class="results-title">Potential Manufacturer Information for <span id="searchedChipDisplay" class="chip-number-display"></span></h2>
+        <div id="resultsArea" class="results-area" style="display: none;" aria-live="polite">
+            <div class="results-title">
+                <span>Potential Info for <span id="searchedChipDisplay" class="chip-number-display"></span></span>
+                <button id="copyChipButton" class="button action-button" title="Copy searched chip number" style="display:none;">
+                    <i class="fas fa-copy"></i> Copy Chip #
+                </button>
+            </div>
+             <span id="copyFeedback" class="copy-feedback block text-right -mt-4 mb-2"></span>
             <div id="testChipWarning" class="warning-message" style="display: none;"></div>
             <div id="chipInfoOutput">
                 </div>
@@ -492,6 +543,9 @@
 
         const lookupButton = document.getElementById('lookupButton');
         const microchipInput = document.getElementById('microchipNumber');
+        const clearInputButton = document.getElementById('clearInputButton');
+        const copyChipButton = document.getElementById('copyChipButton');
+        const copyFeedbackSpan = document.getElementById('copyFeedback');
         const resultsArea = document.getElementById('resultsArea');
         const chipInfoOutputDiv = document.getElementById('chipInfoOutput');
         const notFoundMessageDiv = document.getElementById('notFoundMessage');
@@ -500,6 +554,39 @@
         const searchedChipDisplay = document.getElementById('searchedChipDisplay');
         const testChipWarningDiv = document.getElementById('testChipWarning');
 
+        microchipInput.addEventListener('input', () => {
+            clearInputButton.style.display = microchipInput.value ? 'block' : 'none';
+        });
+
+        clearInputButton.addEventListener('click', () => {
+            microchipInput.value = '';
+            clearInputButton.style.display = 'none';
+            inputErrorDiv.style.display = 'none';
+            resultsArea.style.display = 'none';
+            microchipInput.focus();
+        });
+        
+        copyChipButton.addEventListener('click', () => {
+            const chipNumberToCopy = searchedChipDisplay.textContent;
+            if (chipNumberToCopy) {
+                // Use the document.execCommand for broader compatibility in iFrames
+                const textarea = document.createElement('textarea');
+                textarea.value = chipNumberToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    copyFeedbackSpan.textContent = 'Copied!';
+                } catch (err) {
+                    copyFeedbackSpan.textContent = 'Failed to copy.';
+                    console.error('Fallback: Oops, unable to copy', err);
+                }
+                document.body.removeChild(textarea);
+                setTimeout(() => { copyFeedbackSpan.textContent = ''; }, 2000);
+            }
+        });
+
+
         lookupButton.addEventListener('click', () => {
             const rawChipNumber = microchipInput.value.trim();
             inputErrorDiv.style.display = 'none'; 
@@ -507,6 +594,8 @@
             chipInfoOutputDiv.innerHTML = ''; 
             notFoundMessageDiv.style.display = 'none';
             testChipWarningDiv.style.display = 'none';
+            copyChipButton.style.display = 'none';
+            copyFeedbackSpan.textContent = '';
             loader.style.display = 'block';
 
             if (!rawChipNumber) {
@@ -568,6 +657,8 @@
                 resultsArea.style.display = 'block';
                 loader.style.display = 'none';
                 searchedChipDisplay.textContent = rawChipNumber;
+                copyChipButton.style.display = 'inline-block';
+
 
                 if (isTestChip) {
                     testChipWarningDiv.innerHTML = `<i class="fas fa-exclamation-triangle mr-2"></i><strong>Test Chip Warning:</strong> ${testChipNote}`;
