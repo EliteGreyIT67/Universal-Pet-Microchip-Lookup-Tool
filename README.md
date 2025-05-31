@@ -94,7 +94,7 @@ How to Contribute:
 5. Push to the branch (`git push origin feature/YourFeature`).
 6. Open a Pull Request.
    
-## Future Enhancements (Ideas)
+## Future Enhancements
 - Data from External JSON: (Implemented)
 - PWA Features: Add service worker for offline availability (though data would still be static).
 - Internationalization (i18n): Translate UI elements if there's demand.
