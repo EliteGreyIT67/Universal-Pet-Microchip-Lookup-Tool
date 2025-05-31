@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Microchip Lookup (Completed Data)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Lighter gray background */
+        }
+        .container {
+            max-width: 750px; /* Slightly wider for more info */
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .title {
+            font-size: 2rem; /* Larger title */
+            font-weight: 700;
+            color: #1e40af; /* Deeper blue */
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .input-label {
+            font-weight: 600; /* Bolder label */
+            color: #374151;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .input-field {
+            width: 100%;
+            padding: 0.875rem 1.125rem; /* More padding */
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            margin-bottom: 1.25rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-size: 1rem;
+        }
+        .input-field:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+            outline: none;
+        }
+        .button {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background-color: #1d4ed8; /* Standard blue */
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 1rem;
+        }
+        .button:hover {
+            background-color: #1e40af; /* Darker on hover */
+        }
+        .results-area {
+            margin-top: 2.5rem;
+        }
+        .results-title {
+            font-size: 1.5rem; /* Prominent results title */
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 0.75rem;
+        }
+        .result-entry {
+            background-color: #f9fafb;
+            padding: 1.25rem;
+            border-radius: 8px;
+            margin-bottom: 1.25rem;
+            border: 1px solid #e5e7eb;
+        }
+        .result-entry h3 { /* Brand/Company Name */
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 0.75rem;
+        }
+        .result-item {
+            margin-bottom: 0.625rem;
+            color: #4b5563;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .result-item strong {
+            color: #1f2937;
+            font-weight: 500;
+        }
+        .result-item i { /* Icons */
+            margin-right: 0.5rem;
+            color: #3b82f6;
+            width: 16px; /* Ensure icon alignment */
+            text-align: center;
+        }
+        .result-item a {
+            color: #2563eb;
+            text-decoration: underline;
+            word-break: break-all;
+        }
+        .result-item a:hover {
+            color: #1d4ed8;
+        }
+        .notes-list {
+            margin-top: 0.75rem;
+            padding-left: 1.25rem;
+            list-style: disc;
+        }
+        .notes-list li {
+            margin-bottom: 0.375rem;
+        }
+        .error-message, .warning-message {
+            color: #c81e1e; /* Stronger red */
+            font-weight: 500;
+            margin-top: 0.5rem;
+            padding: 0.75rem;
+            background-color: #fee2e2;
+            border: 1px solid #fca5a5;
+            border-radius: 6px;
+        }
+        .warning-message {
+            color: #a16207;
+            background-color: #fef9c3;
+            border: 1px solid #fde047;
+        }
+        .info-box {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #eef2ff;
+            border: 1px solid #c7d2fe;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: #3730a3;
+        }
+        .info-box strong {
+            font-weight: 600;
+        }
+        .info-box a {
+            color: #3b82f6;
+            font-weight: 500;
+            text-decoration: underline;
+        }
+        .loader {
+            border: 5px solid #e5e7eb; /* Thicker loader */
+            border-top: 5px solid #3b82f6;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 1.5rem auto 0;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .chip-number-display {
+            font-weight: 500;
+            background-color: #e0e7ff;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            color: #3730a3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Universal Pet Microchip Lookup</h1>
+        
+        <div>
+            <label for="microchipNumber" class="input-label">Enter Microchip Number (9-15 characters):</label>
+            <input type="text" id="microchipNumber" class="input-field" placeholder="e.g., 985123456789012 or AVID123456789">
+            <div id="inputError" class="error-message" style="display: none;"></div>
+        </div>
+
+        <button id="lookupButton" class="button">
+            <i class="fas fa-search mr-2"></i>Lookup Manufacturer
+        </button>
+        <div id="loader" class="loader"></div>
+
+        <div id="resultsArea" class="results-area" style="display: none;">
+            <h2 class="results-title">Potential Manufacturer Information for <span id="searchedChipDisplay" class="chip-number-display"></span></h2>
+            <div id="testChipWarning" class="warning-message" style="display: none;"></div>
+            <div id="chipInfoOutput">
+                </div>
+            <div id="notFoundMessage" class="info-box" style="display: none;">
+                <p class="font-semibold text-lg mb-2">No specific manufacturer prefix matched in our database.</p>
+                <p>This tool identifies potential manufacturers based on common prefixes from the "MICROCHIP FORMAT GUIDE" (MicrochipHelp.com / Lost Dogs of America, updated 02/04/2025). It <strong>does not</strong> check live registration databases.</p>
+                <p class="mt-2"><strong>Next Steps:</strong></p>
+                <ul class="list-disc list-inside ml-4 mt-1">
+                    <li><strong>ALWAYS use the <a href="https://www.petmicrochiplookup.org" target="_blank" rel="noopener noreferrer">AAHA Universal Pet Microchip Lookup</a>.</strong> This tool searches multiple actual registration databases.</li>
+                    <li>Also check <a href="http://www.petchip.info" target="_blank" rel="noopener noreferrer">PetChip.info</a>, as some registries do not participate in the AAHA tool.</li>
+                    <li>For chips potentially from outside the US (e.g., not starting with '9' or an AVID format), they might use <a href="https://en.wikipedia.org/wiki/ISO_3166-1_numeric#Current_codes" target="_blank" rel="noopener noreferrer">ISO Country Codes</a>. Check international databases like <a href="http://www.europetnet.com/" target="_blank" rel="noopener noreferrer">Europetnet</a> and <a href="http://www.petmaxx.com/" target="_blank" rel="noopener noreferrer">PetMaxx</a>.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="info-box mt-8">
+            <p><strong>Important:</strong> This tool provides potential manufacturer information based on prefixes. For actual pet registration details and to find an owner, you <strong>MUST</strong> use a comprehensive lookup service like the <a href="https://www.petmicrochiplookup.org" target="_blank" rel="noopener noreferrer">AAHA Universal Pet Microchip Lookup</a>.</p>
+            <p class="mt-1">Data based on "MICROCHIP FORMAT GUIDE" (MicrochipHelp.com / Lost Dogs of America, updated 02/04/2025).</p>
+        </div>
+    </div>
+
+    <script>
+        // --- Microchip Manufacturer Data (Completed Structure) ---
+        // Data meticulously transcribed and structured from "MICROCHIP FORMAT GUIDE" 
+        // (source: MicrochipHelp.com / Lost Dogs of America, updated 02/04/2025).
+        const manufacturersData = [
+            { // Page 1
+                prefix: "900032",
+                entries: [{ brand: "UNKNOWN", contacts: [{type: "web", value: "https://www.getmeknown.co.za/", text:"Try GetMeKnown.co.za"}], notes: ["Mystery chip! If you know who sells these, let us know."] }]
+            },
+            {
+                prefix: "900074",
+                entries: [{ brand: "SMART TAG (ID Tag)", contacts: [{type: "phone", value: "201-537-5644"}], notes: ["Info if unenrolled."] }]
+            },
+            {
+                prefix: "900085",
+                entries: [
+                    { brand: "PETSTABLISHED", contacts: [{type: "phone", value: "855-684-3184 ext 3"}], notes: ["Info if unenrolled."] },
+                    { brand: "HOMEWARDBOUND (Alternative)", contacts: [{type: "phone", value: "844-643-4663"}]},
+                    { brand: "ONLINE AMAZON (REXID-PET.COM) (Alternative)", contacts: [{type: "web", value: "http://REXID-PET.COM", text:"REXID-PET.COM"}]}
+                ]
+            },
+            {
+                prefix: "900108",
+                entries: [{ brand: "ViaGuard", contacts: [{type: "phone", value: "877-842-4827"}], notes: ["No info if unenrolled."] }]
+            },
+            {
+                prefix: "900111", // Also 900113, 900115, 900118
+                entries: [{ brand: "INTERNATIONAL PET REGISTRY (IPR)", contacts: [{type: "phone", value: "844-477-7387"}], notes: ["Applies to prefixes 900111, 900113, 900115, 900118.", "Info if unenrolled, but manufacturer may sell transponders direct to consumer & then there is no record. You must check."] }]
+            },
+            { prefix: "900113", _aliasFor: "900111" }, 
+            { prefix: "900115", _aliasFor: "900111" },
+            { prefix: "900118", _aliasFor: "900111" },
+            {
+                prefix: "900139",
+                entries: [{ brand: "SMART TAG (ID Tag)", contacts: [{type: "phone", value: "201-537-5644"}], notes: ["Info if unenrolled."] }]
+            },
+            {
+                prefix: "900164",
+                entries: [{ brand: "SAVE THIS LIFE + MULTIPLE UNK VENDORS", contacts: [{type: "phone", value: "855-777-2447 (Save This Life)"}], notes: [] }]
+            },
+            { // Page 2
+                prefix: "900215",
+                entries: [{ brand: "Sold direct to consumer from Amazon", contacts: [{type: "web", value: "isenvo.com", text:"isenvo.com"}], notes: [] }]
+            },
+            {
+                prefix: "900223",
+                entries: [
+                    { brand: "Get Me Known", contacts: [{type: "web", value: "https://www.getmeknown.co.za/", text:"GetMeKnown.co.za"}]},
+                    { brand: "Five Star ID", contacts: [{type: "web", value: "https://www.fivestarid.co.za/", text:"FiveStarID.co.za"}]}
+                ]
+            },
+            {
+                prefix: "900235",
+                entries: [{ brand: "FiNano", contacts: [{type: "web", value: "nano.tryfi.com/", text:"nano.tryfi.com"}], notes: [] }]
+            },
+            {
+                prefix: "900250",
+                entries: [{ brand: "FURREKA", contacts: [{type: "phone", value: "844-387-7352"}], notes: [] }]
+            },
+            {
+                prefix: "901017",
+                entries: [{ brand: "UI Devices", contacts: [{type: "phone", value: "224-444-8484"}], notes: [] }]
+            },
+            {
+                prefix: "911", 
+                entries: [{ brand: "911PETCHIP/FREE PET CHIP REGISTRY", contacts: [{type: "phone", value: "888-546-7615"}], notes: ["Info if unenrolled."] }]
+            },
+            {
+                prefix: "927",
+                entries: [{ brand: "Flucky (Humanada S.A. de C.V.) MEXICO", contacts: [{type: "phone", value: "+52 614 142 6826"}, {type: "email", value: "info@flucky.com.mx"}, {type: "web", value: "www.flucky.com.mx", text:"www.flucky.com.mx"}], notes: ["Info if unenrolled."] }]
+            },
+            {
+                prefix: "932",
+                entries: [{ brand: "LAMBERT VET SUPPLY (ADEQID)", contacts: [], notes: ["No registry kept."] }]
+            },
+            {
+                prefix: "933",
+                entries: [{ brand: "BUDDY ID (Microchip ID Systems)", contacts: [{type: "phone", value: "800-434-2843"}], notes: ["Info if unenrolled.", "(933007125056789 test chip).", "Also check Get Me Known: https://www.getmeknown.co.za/"] }]
+            },
+            {
+                prefix: "939",
+                entries: [
+                    { brand: "MICROCHIP 4 SOLUTIONS", contacts: [{type: "phone", value: "877-738-4384"}]},
+                    { brand: "Electrinet (MEXICO) sells to FCM.mx", contacts: [{type: "web", text:"Use contact form on bottom of FCM.mx", value:"http://FCM.mx"}], notes:["Some 939 chips are sold to Mexico."]} 
+                ]
+            },
+            {
+                prefix: "941",
+                entries: [
+                    { brand: "PETKEY", contacts: [{type: "phone", value: "866-699-3463"}]},
+                    { brand: "24 PETWATCH", contacts: [{type: "phone", value: "866-597-2424"}]}
+                ]
+            },
+            {
+                prefix: "944",
+                entries: [{ brand: "Micro-ID (UK)", contacts: [{type: "web", value: "http://www.iso-944.com/", text:"www.iso-944.com"}], notes: [] }]
+            },
+            {
+                prefix: "952",
+                entries: [{ brand: "MICROCHIP 4 SOLUTIONS", contacts: [{type: "phone", value: "877-738-4384"}], notes: [] }]
+            },
+            {
+                prefix: "953",
+                entries: [{ brand: "Virbac BackHome", contacts: [{type: "web", value: "https://findmychip.co.za/", text:"findmychip.co.za"}], notes: [] }]
+            },
+            {
+                prefix: "956",
+                entries: [{ brand: "AKC Reunite", contacts: [{type: "phone", value: "800-252-7894"}], notes: [] }]
+            },
+            {
+                prefix: "963084",
+                entries: [{ brand: "Saving-Life", contacts: [{type: "phone", value: "888-577-7938"}], notes: [] }]
+            },
+            { // Page 3
+                prefix: "965",
+                entries: [{ brand: "BUDDY ID (Microchip ID Systems)", contacts: [{type: "phone", value: "800-434-2843"}], notes: ["Info if unenrolled."] }]
+            },
+            {
+                prefix: "967",
+                entries: [{ brand: "IDENTRAC", contacts: [{type: "email", value: "info@identrac.ca"}], notes: [] }]
+            },
+            {
+                prefix: "968",
+                entries: [
+                    { brand: "SAINT (PET PARENT)", contacts: [{type: "email", value: "info@aapp-pets.org"}]},
+                    { brand: "French Canadian aZoo.me", contacts: [{type: "email", value: "info@aZoo.me"}]},
+                    { brand: "Saving-Life", contacts: [{type: "phone", value: "888-577-7938"}]}
+                ]
+            },
+            {
+                prefix: "977", 
+                entries: [{ brand: "AVID", contacts: [{type: "phone", value: "800-336-2843"}], notes: [] }]
+            },
+            {
+                prefix: "978",
+                entries: [{ brand: "Virbac BackHome", contacts: [{type: "web", value: "https://findmychip.co.za/", text:"findmychip.co.za"}], notes: [] }]
+            },
+            {
+                prefix: "981010", 
+                entries: [{ brand: "Banfield", contacts: [{type: "phone", value: "800-838-6738"}], notes: [] }]
+            },
+            {
+                prefix: "98102", 
+                entries: [
+                    { brand: "PETLINK (Datamars formerly Bayer ResQ)", contacts: [{type: "phone", value: "877-738-5465"}]},
+                    { brand: "24PETWATCH (formerly found animals)", contacts: [{type: "phone", value: "866-597-2424"}]} 
+                ],
+                generalNote: "Applies to prefixes 98102, 98103."
+            },
+            { prefix: "98103", _aliasFor: "98102" },
+            {
+                prefix: "981100",
+                entries: [{ brand: "Possibly Datamars or 'Dog ID'", contacts: [], notes: ["Check https://www.europetnet.org/ and Petmaxx"] }]
+            },
+            {
+                prefix: "982",
+                entries: [{ brand: "24PETWATCH", contacts: [{type: "phone", value: "866-597-2424"}], notes: [] }]
+            },
+            {
+                prefix: "985",
+                entries: [{ brand: "HOME AGAIN", contacts: [{type: "phone", value: "888-466-3242"}], notes: ["Any chip beginning 985170 or 985191 with no shipping info is a test chip."] }]
+            },
+            {
+                prefix: "987",
+                entries: [{ brand: "SMART TAG (ID Tag)", contacts: [{type: "phone", value: "201-537-5644"}], notes: ["Info if unenrolled."] }]
+            },
+            {
+                prefix: "990",
+                entries: [
+                    { brand: "NANOCHIPID.com", contacts: [{type: "web", text:"Online only", value:"http://NANOCHIPID.com"}], notes: ["Info if unenrolled."]},
+                    { brand: "VIAGUARD", contacts: [{type: "phone", value: "877-842-4827"}], notes: ["No info if unenrolled."]}
+                ]
+            },
+            { // Page 4
+                prefix: "991",
+                entries: [
+                    { brand: "SAVE THIS LIFE", contacts: [{type: "phone", value: "855-777-2447"}], notes: ["Check STL website/call."] },
+                    { brand: "911PETCHIP/ FREE PET CHIP REGISTRY", contacts: [{type: "phone", value: "888-546-7615"}], notes: ["Info if unenrolled."] }, 
+                    { brand: "PEEVA", contacts: [{type: "phone", value: "833-733-8226"}], notes: ["No info if unenrolled."] }
+                ]
+            },
+            {
+                prefix: "992",
+                entries: [
+                    { brand: "ACA MARRS", contacts: [{type: "phone", value: "800-992-0571"}], notes: ["No info if unenrolled."] },
+                    { brand: "INTERNATIONAL PET REGISTRY", contacts: [{type: "phone", value: "844-477-7387"}], notes: ["Info if unenrolled, but manufacturer may sell transponders direct to consumer & then there is no record. You must check."] },
+                    { brand: "NANOCHIPID.com", contacts: [{type: "web", value: "http://NANOCHIPID.com", text:"NANOCHIPID.com"}], notes: [] },
+                    { brand: "PETKEY", contacts: [{type: "phone", value: "866-699-3463"}], notes: [] },
+                    { brand: "SMART TRAC", contacts: [{type: "web", value: "http://PETMAXX.COM", text:"PETMAXX.COM"}], notes: [] }, 
+                    { brand: "24 PETWATCH", contacts: [{type: "phone", value: "866-597-2424"}], notes: [] }
+                ]
+            },
+            {
+                prefix: "99", 
+                entries: [
+                    { brand: "ACA MARRS", contacts: [{type: "phone", value: "800-992-0571"}], notes: ["No info if unenrolled."] },
+                    { brand: "INTERNATIONAL PET REGISTRY", contacts: [{type: "phone", value: "844-477-7387"}], notes: ["Info if unenrolled, but manufacturer may sell transponders direct to consumer & then there is no record. You must check."] }
+                ],
+                generalNote: "For 15-digit chips starting '99' not otherwise listed. (One batch of 999 were test chips & should not have been released. Report these rogue 999 chips to andie@icar.org)"
+            },
+            { 
+                prefix: "AVID9DIGIT", 
+                entries: [{ brand: "AVID", contacts: [{type: "phone", value: "800-336-2843"}], notes: ["This appears to be a 9-digit AVID numeric chip."] }]
+            },
+            { 
+                prefix: "000", 
+                entries: [{ brand: "AKC Reunite", contacts: [{type: "phone", value: "800-252-7894"}], notes: ["Also check trovansearch.com"] }]
+            },
+            {
+                prefix: "0A0", 
+                entries: [{ brand: "Buddy ID", contacts: [{type: "phone", value: "800-434-2843"}], notes: [] }]
+            },
+            {
+                prefix: "0A1", 
+                entries: [{ brand: "24PETWATCH", contacts: [{type: "phone", value: "866-597-2424"}], notes: [] }]
+            },
+            {
+                prefix: "0D0D", 
+                entries: [{ brand: "BANFIELD (HOME AGAIN)", contacts: [{type: "phone", value: "877-567-8738"}], notes: [] }]
+            },
+            {
+                prefix: "1", 
+                entries: [{ brand: "AVID", contacts: [{type: "phone", value: "800-336-2843"}], notes: ["For 10-digit chips starting with '1'."] }]
+            },
+            {
+                prefix: "4", 
+                entries: [{ brand: "HOMEAGAIN", contacts: [{type: "phone", value: "888-466-3242"}], notes: ["For 10-digit chips starting with '4'."] }]
+            },
+            { // Page 5
+                prefix: "7E1", 
+                entries: [{ brand: "BUDDY ID (Microchip ID Systems)", contacts: [{type: "phone", value: "800-434-2843"}], notes: ["Info if unenrolled."] }]
+            },
+            {
+                prefix: "9A1", 
+                entries: [{ brand: "24PETWATCH", contacts: [{type: "phone", value: "866-597-2424"}], notes: [] }]
+            },
+            {
+                prefix: "TR", 
+                entries: [{ brand: "AKC Reunite (formerly Trovan)", contacts: [{type: "phone", value: "800-252-7894"}], notes: [] }]
+            },
+            { 
+                prefix: "AVID",
+                entries: [{ brand: "AVID", contacts: [{type: "phone", value: "800-336-2843"}], notes: ["Alphanumeric AVID chip. Ensure number is entered correctly (e.g., AVIDxxxxxxxxx)."] }]
+            },
+            { 
+                prefix: "900", 
+                entries: [{ brand: "ACA MARRS", contacts:[{type:"phone", value:"800-992-0571"}], notes: ["No info if unenrolled.", "This is for 15-digit chips starting '900' not covered by more specific '900xxx' prefixes. Other companies like Homeward Bound (844-643-4663) might also use '900' prefixes. Always check AAHA."]}],
+            }
+        ];
+        
+        const aliasMap = new Map();
+        manufacturersData.forEach(item => {
+            if (item._aliasFor) {
+                const target = manufacturersData.find(targetItem => targetItem.prefix === item._aliasFor);
+                if (target) {
+                    aliasMap.set(item.prefix, target);
+                }
+            }
+        });
+
+        const resolvedManufacturersData = manufacturersData
+            .filter(item => !item._aliasFor) 
+            .map(item => { 
+                const originalItem = aliasMap.get(item.prefix); 
+                return originalItem ? { ...originalItem, prefix: item.prefix } : { ...item }; 
+            });
+
+        resolvedManufacturersData.sort((a, b) => {
+            const lenA = a.prefix === "AVID9DIGIT" ? 9.5 : a.prefix.length; 
+            const lenB = b.prefix === "AVID9DIGIT" ? 9.5 : b.prefix.length;
+            if (lenB !== lenA) {
+                return lenB - lenA; 
+            }
+            if (typeof a.prefix === 'string' && typeof b.prefix === 'string') {
+                if (a.prefix.match(/^[A-Z]+$/) && b.prefix.match(/^\d+$/)) return -1; 
+                if (a.prefix.match(/^\d+$/) && b.prefix.match(/^[A-Z]+$/)) return 1;  
+            }
+            return 0;
+        });
+
+        const lookupButton = document.getElementById('lookupButton');
+        const microchipInput = document.getElementById('microchipNumber');
+        const resultsArea = document.getElementById('resultsArea');
+        const chipInfoOutputDiv = document.getElementById('chipInfoOutput');
+        const notFoundMessageDiv = document.getElementById('notFoundMessage');
+        const inputErrorDiv = document.getElementById('inputError');
+        const loader = document.getElementById('loader');
+        const searchedChipDisplay = document.getElementById('searchedChipDisplay');
+        const testChipWarningDiv = document.getElementById('testChipWarning');
+
+        lookupButton.addEventListener('click', () => {
+            const rawChipNumber = microchipInput.value.trim();
+            inputErrorDiv.style.display = 'none'; 
+            resultsArea.style.display = 'none'; 
+            chipInfoOutputDiv.innerHTML = ''; 
+            notFoundMessageDiv.style.display = 'none';
+            testChipWarningDiv.style.display = 'none';
+            loader.style.display = 'block';
+
+            if (!rawChipNumber) {
+                inputErrorDiv.textContent = 'Please enter a microchip number.';
+                inputErrorDiv.style.display = 'block';
+                loader.style.display = 'none';
+                return;
+            }
+
+            const chipNumber = rawChipNumber.replace(/[\s-*]+/g, '').toUpperCase(); 
+
+            if (!/^[A-Z0-9]{9,15}$/.test(chipNumber)) {
+                if (chipNumber.length < 9 || chipNumber.length > 15) {
+                    inputErrorDiv.textContent = 'Microchip number should be 9 to 15 characters long (after removing spaces/hyphens/asterisks).';
+                } else {
+                    inputErrorDiv.textContent = 'Invalid characters. Use numbers (0-9) and letters (A-Z) only.';
+                }
+                inputErrorDiv.style.display = 'block';
+                loader.style.display = 'none';
+                return;
+            }
+            
+            setTimeout(() => {
+                let matches = [];
+                let isTestChip = false;
+                let testChipNote = "";
+
+                if (chipNumber === "933007125056789") {
+                    isTestChip = true;
+                    testChipNote = "This specific number (933007125056789) is identified as a test chip (Buddy ID).";
+                } else if (chipNumber.startsWith("985170") || chipNumber.startsWith("985191")) {
+                    isTestChip = true;
+                    testChipNote = `Chips starting with ${chipNumber.substring(0,6)} (like this one) can be Home Again test chips if they had no shipping info and should not be in circulation.`;
+                }
+
+                if (chipNumber.length === 9 && /^\d+$/.test(chipNumber)) {
+                    const avid9DigitEntry = resolvedManufacturersData.find(m => m.prefix === "AVID9DIGIT");
+                    if (avid9DigitEntry) matches.push(avid9DigitEntry);
+                } else if (chipNumber.startsWith("AVID")) {
+                    const avidLiteralEntry = resolvedManufacturersData.find(m => m.prefix === "AVID");
+                    if (avidLiteralEntry) matches.push(avidLiteralEntry);
+                }
+                
+                if(matches.length === 0) {
+                    for (const mfrData of resolvedManufacturersData) {
+                        if (mfrData.prefix === "AVID9DIGIT" || mfrData.prefix === "AVID") continue; 
+                        
+                        if (chipNumber.startsWith(mfrData.prefix)) {
+                            if ((mfrData.prefix === "1" || mfrData.prefix === "4") && chipNumber.length !== 10) {
+                                continue;
+                            }
+                             const aliasedItem = aliasMap.get(mfrData.prefix) || mfrData;
+                             matches.push(aliasedItem);
+                            break; 
+                        }
+                    }
+                }
+
+                resultsArea.style.display = 'block';
+                loader.style.display = 'none';
+                searchedChipDisplay.textContent = rawChipNumber;
+
+                if (isTestChip) {
+                    testChipWarningDiv.innerHTML = `<i class="fas fa-exclamation-triangle mr-2"></i><strong>Test Chip Warning:</strong> ${testChipNote}`;
+                    testChipWarningDiv.style.display = 'block';
+                }
+
+                if (matches.length > 0) {
+                    matches.forEach(match => {
+                        const currentMatchData = aliasMap.get(match.prefix) || match; 
+
+                        if (currentMatchData.generalNote) {
+                            const generalNoteEl = document.createElement('p');
+                            generalNoteEl.className = 'result-item italic mb-3 text-sm text-gray-600';
+                            generalNoteEl.innerHTML = `<strong>Note for prefix ${currentMatchData.prefix}:</strong> ${currentMatchData.generalNote}`;
+                            chipInfoOutputDiv.appendChild(generalNoteEl);
+                        }
+                        currentMatchData.entries.forEach(entry => {
+                            const entryDiv = document.createElement('div');
+                            entryDiv.className = 'result-entry';
+                            
+                            let content = `<h3>${entry.brand}</h3>`;
+                            if (entry.manufacturer && entry.manufacturer !== entry.brand) {
+                                content += `<p class="result-item"><strong>Manufacturer:</strong> ${entry.manufacturer}</p>`;
+                            }
+
+                            if (entry.contacts && entry.contacts.length > 0) {
+                                entry.contacts.forEach(contact => {
+                                    let icon = '';
+                                    let link = contact.value;
+                                    let displayValue = contact.text || contact.value;
+                                    if (contact.type === 'phone') {
+                                        icon = '<i class="fas fa-phone"></i>';
+                                        link = `tel:${contact.value.replace(/[^0-9+]/g, '')}`;
+                                    } else if (contact.type === 'web') {
+                                        icon = '<i class="fas fa-globe"></i>';
+                                        link = contact.value.startsWith('http') ? contact.value : `http://${contact.value}`;
+                                    } else if (contact.type === 'email') {
+                                        icon = '<i class="fas fa-envelope"></i>';
+                                        link = `mailto:${contact.value}`;
+                                    }
+                                    content += `<p class="result-item">${icon}<a href="${link}" target="_blank" rel="noopener noreferrer">${displayValue}</a></p>`;
+                                });
+                            }
+
+                            if (entry.notes && entry.notes.length > 0) {
+                                content += '<p class="result-item mt-2"><strong>Notes:</strong></p><ul class="notes-list">';
+                                entry.notes.forEach(note => {
+                                    const noteWithLinks = note.replace(/(https?:\/\/[^\s!"'<>()]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+                                    content += `<li>${noteWithLinks}</li>`;
+                                });
+                                content += '</ul>';
+                            }
+                            entryDiv.innerHTML = content;
+                            chipInfoOutputDiv.appendChild(entryDiv);
+                        });
+                    });
+                } else {
+                    notFoundMessageDiv.style.display = 'block';
+                }
+            }, 300);
+        });
+
+        microchipInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); 
+                lookupButton.click();
+            }
+        });
+    </script>
+</body>
+</html>
+
