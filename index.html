@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pet Microchip Lookup (JSON Data)</title>
+    <title>Pet Microchip Lookup (Direct Links)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -13,7 +13,7 @@
             background-color: #f3f4f6; 
         }
         .container {
-            max-width: 750px; 
+            max-width: 800px; 
             margin: 2rem auto;
             padding: 2rem;
             background-color: white;
@@ -117,49 +117,98 @@
             border: 1px solid #e5e7eb;
         }
         .result-entry h3 { 
-            font-size: 1.25rem;
+            font-size: 1.375rem; 
             font-weight: 600;
             color: #111827;
+            margin-bottom: 0.5rem;
+        }
+         .result-entry h4, #directLookupLinksArea h4 { 
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e40af;
+            margin-top: 1rem;
             margin-bottom: 0.75rem;
+            padding-bottom: 0.25rem;
+            border-bottom: 1px solid #e0e7ff;
+        }
+        #directLookupLinksArea h4 {
+             margin-bottom: 1rem; /* More space for the list */
         }
         .result-item {
             margin-bottom: 0.625rem;
             color: #4b5563;
             font-size: 0.95rem;
             line-height: 1.6;
+            display: flex; 
+            align-items: flex-start; 
         }
         .result-item strong {
             color: #1f2937;
             font-weight: 500;
+            min-width: 120px; 
+            display: inline-block;
         }
-        .result-item i { 
-            margin-right: 0.5rem;
+        .result-item i.fa-fw { 
+            margin-right: 0.625rem; 
             color: #3b82f6;
-            width: 16px; 
+            width: 1.25em; 
             text-align: center;
+            margin-top: 0.125rem; 
         }
-        .result-item a {
+         .result-item span {
+            word-break: break-word;
+        }
+        .result-item a, .direct-lookup-list-item a {
             color: #2563eb;
             text-decoration: underline;
-            word-break: break-all;
         }
-        .result-item a:hover {
+        .result-item a:hover, .direct-lookup-list-item a:hover {
             color: #1d4ed8;
         }
-        .notes-list {
-            margin-top: 0.75rem;
-            padding-left: 1.25rem;
+        .notes-list, .relevant-links-list, .registries-list, .direct-lookup-list {
+            margin-top: 0.5rem;
+            padding-left: 0; /* No default list indent, handled by item */
+            list-style-type: none;
         }
-        .notes-list li {
+        .notes-list li, .relevant-links-list li, .registries-list li {
             margin-bottom: 0.375rem;
             list-style-type: disc;
+            margin-left: 1.5rem;
         }
-        .contact-section, .notes-section {
-            margin-top: 0.75rem;
-            padding-top: 0.5rem;
-            border-top: 1px dashed #d1d5db;
+        .direct-lookup-list-item {
+            background-color: #f0f9ff;
+            border: 1px solid #e0f2fe;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            margin-bottom: 0.625rem;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.2s;
         }
-        .contact-section:first-child, .notes-section:first-child {
+        .direct-lookup-list-item:hover {
+            background-color: #e0f2fe;
+        }
+        .direct-lookup-list-item i {
+            margin-right: 0.75rem;
+            color: #0ea5e9; /* Sky blue */
+            font-size: 1.1em;
+        }
+
+        .relevant-links-list i { 
+            margin-right: 0.375rem;
+            color: #3b82f6;
+        }
+
+        .contact-section, .notes-section, .manufacturer-details-section, .additional-info-section, #directLookupLinksArea {
+            margin-top: 1rem;
+            padding-top: 0.75rem;
+        }
+        #directLookupLinksArea {
+             border-top: 2px solid #93c5fd; /* More prominent separator */
+             padding-bottom: 1rem;
+        }
+        .contact-section:first-child, .notes-section:first-child, 
+        .manufacturer-details-section:first-child, .additional-info-section:first-child {
              margin-top:0;
              padding-top:0;
              border-top: none;
@@ -264,32 +313,42 @@
                     <i class="fas fa-copy"></i> Copy Chip #
                 </button>
             </div>
-             <span id="copyFeedback" class="copy-feedback block text-right -mt-4 mb-2"></span>
+            <span id="copyFeedback" class="copy-feedback block text-right -mt-4 mb-2"></span>
             <div id="testChipWarning" class="warning-message" style="display: none;"></div>
+            
+            <div id="directLookupLinksArea" style="display: none;">
+                <h4><i class="fas fa-external-link-alt mr-2"></i>Direct Registry Lookups</h4>
+                <p class="text-sm text-gray-600 mb-3">Try these services to find owner registration. This tool does not check live databases.</p>
+                <ul id="directLookupList" class="direct-lookup-list">
+                    </ul>
+            </div>
+
             <div id="chipInfoOutput">
                 </div>
+
             <div id="notFoundMessage" class="info-box" style="display: none;">
                 <p class="font-semibold text-lg mb-2">No specific manufacturer prefix matched in our database.</p>
-                <p>This tool identifies potential manufacturers based on common prefixes from the "MICROCHIP FORMAT GUIDE" (MicrochipHelp.com / Lost Dogs of America, updated 02/04/2025). It <strong>does not</strong> check live registration databases.</p>
+                <p>This tool identifies potential manufacturers based on common prefixes. It <strong>does not</strong> check live registration databases.</p>
                 <div id="countryCodeSuggestion" style="display:none; margin-top: 0.5rem; padding: 0.5rem; background-color: #ffedd5; border: 1px solid #fed7aa; border-radius: 4px;">
                     <p class="font-semibold text-amber-700"><i class="fas fa-globe-americas mr-1"></i>International Chip? The entered number doesn't start with '9' or a common US/North American prefix. It might use an <a href="https://en.wikipedia.org/wiki/ISO_3166-1_numeric#Current_codes" target="_blank" rel="noopener noreferrer" class="underline">ISO Country Code</a>.</p>
                 </div>
-                <p class="mt-2"><strong>Next Steps:</strong></p>
+                <p class="mt-3"><strong>Next Steps:</strong></p>
                 <ul class="list-disc list-inside ml-4 mt-1">
-                    <li><strong>ALWAYS use the <a href="https://www.petmicrochiplookup.org" target="_blank" rel="noopener noreferrer">AAHA Universal Pet Microchip Lookup</a>.</strong> This tool searches multiple actual registration databases.</li>
+                    <li>Use the <strong>"Direct Registry Lookups"</strong> links provided above to search various databases.</li>
+                    <li>The <a href="https://www.petmicrochiplookup.org" target="_blank" rel="noopener noreferrer">AAHA Universal Pet Microchip Lookup</a> is a key resource.</li>
                     <li>Also check <a href="http://www.petchip.info" target="_blank" rel="noopener noreferrer">PetChip.info</a>, as some registries do not participate in the AAHA tool.</li>
-                    <li>For chips potentially from outside the US, check international databases like <a href="http://www.europetnet.com/" target="_blank" rel="noopener noreferrer">Europetnet</a> and <a href="http://www.petmaxx.com/" target="_blank" rel="noopener noreferrer">PetMaxx</a>.</li>
                 </ul>
             </div>
         </div>
         
         <div class="info-box mt-8">
-            <p><strong>Important:</strong> This tool provides potential manufacturer information based on prefixes. For actual pet registration details and to find an owner, you <strong>MUST</strong> use a comprehensive lookup service like the <a href="https://www.petmicrochiplookup.org" target="_blank" rel="noopener noreferrer">AAHA Universal Pet Microchip Lookup</a>.</p>
+            <p><strong>Important:</strong> This tool provides potential manufacturer information based on prefixes. For actual pet registration details and to find an owner, you <strong>MUST</strong> use a comprehensive lookup service like the <a href="https://www.petmicrochiplookup.org" target="_blank" rel="noopener noreferrer">AAHA Universal Pet Microchip Lookup</a> and the other direct lookup links provided.</p>
             <p class="mt-1">Data based on "MICROCHIP FORMAT GUIDE" by <a href="http://www.microchiphelp.com" target="_blank" rel="noopener noreferrer" class="underline">MicrochipHelp.com</a> / Lost Dogs of America (updated 02/04/2025). For questions about the guide, contact: Team@microchiphelp.com.</p>
         </div>
     </div>
 
     <script>
+        // Global variables
         let manufacturersData = [];
         let aliasMap = new Map();
         let resolvedManufacturersData = [];
@@ -310,1053 +369,102 @@
         const loader = document.getElementById('loader');
         const searchedChipDisplay = document.getElementById('searchedChipDisplay');
         const testChipWarningDiv = document.getElementById('testChipWarning');
+        const directLookupLinksArea = document.getElementById('directLookupLinksArea');
+        const directLookupListUl = document.getElementById('directLookupList');
+
+        // Direct Lookup Services Data
+        const directLookupServices = [
+            { name: "AAHA Universal Lookup (Professionals)", urlTemplate: "https://www.aaha.org/for-veterinary-professionals/microchip-search/?microchip_id={chip_id}", icon: "fas fa-hospital-user" },
+            { name: "AAHA Universal Lookup (Pet Owners)", urlTemplate: "https://www.aaha.org/petmicrochiplookup?microchip_id={chip_id}", icon: "fas fa-paw" },
+            { name: "PetLink", urlTemplate: "https://www.petlink.net/microchip-search/?microchip-number={chip_id}", icon: "fas fa-link" },
+            { name: "HomeAgain", urlTemplate: "https://www.homeagain.com/chip-lookup/{chip_id}", icon: "fas fa-home" },
+            { name: "Petkey", urlTemplate: "https://petkey.org/Microchip/{chip_id}", icon: "fas fa-key" },
+            { name: "BuddyID", urlTemplate: "https://my.buddyid.com/results.php?key={chip_id}", icon: "fas fa-user-friends" },
+            { name: "NanoChipID", urlTemplate: "https://www.nanochipid.com/lookup/{chip_id}", icon: "fas fa-microchip" },
+            { name: "Petstablished", urlTemplate: "https://petstablished.com/microchip_lookup/{chip_id}", icon: "fas fa-shield-alt" },
+            { name: "FreePetChipRegistry", urlTemplate: "https://www.freepetchipregistry.com/found-pet?chip={chip_id}", icon: "fas fa-database" }
+        ];
+
 
         function loadMicrochipData() {
             dataLoadingMessage.style.display = 'block';
             lookupInterface.style.display = 'none';
             lookupButton.disabled = true;
-
-            // --- EMBEDDED MICROCHIP DATA ---
             const embeddedMicrochipData = [
-                {
-                    "prefix": "900032",
-                    "entries": [
-                        {
-                            "brand": "UNKNOWN",
-                            "contacts": [
-                                {
-                                    "type": "web",
-                                    "value": "https://www.getmeknown.co.za/",
-                                    "text": "Try GetMeKnown.co.za"
-                                }
-                            ],
-                            "notes": [
-                                "Mystery chip! If you know who sells these, let us know."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "900074",
-                    "entries": [
-                        {
-                            "brand": "SMART TAG (ID Tag)",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "201-537-5644"
-                                }
-                            ],
-                            "notes": [
-                                "Info if unenrolled."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "900085",
-                    "entries": [
-                        {
-                            "brand": "PETSTABLISHED",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "855-684-3184 ext 3"
-                                }
-                            ],
-                            "notes": [
-                                "Info if unenrolled."
-                            ]
-                        },
-                        {
-                            "brand": "HOMEWARDBOUND (Alternative)",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "844-643-4663"
-                                }
-                            ]
-                        },
-                        {
-                            "brand": "ONLINE AMAZON (REXID-PET.COM) (Alternative)",
-                            "contacts": [
-                                {
-                                    "type": "web",
-                                    "value": "http://REXID-PET.COM",
-                                    "text": "REXID-PET.COM"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "900108",
-                    "entries": [
-                        {
-                            "brand": "ViaGuard",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "877-842-4827"
-                                }
-                            ],
-                            "notes": [
-                                "No info if unenrolled."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "900111",
-                    "entries": [
-                        {
-                            "brand": "INTERNATIONAL PET REGISTRY (IPR)",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "844-477-7387"
-                                }
-                            ],
-                            "notes": [
-                                "Applies to prefixes 900111, 900113, 900115, 900118.",
-                                "Info if unenrolled, but manufacturer may sell transponders direct to consumer & then there is no record. You must check."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "900113",
-                    "_aliasFor": "900111"
-                },
-                {
-                    "prefix": "900115",
-                    "_aliasFor": "900111"
-                },
-                {
-                    "prefix": "900118",
-                    "_aliasFor": "900111"
-                },
-                {
-                    "prefix": "900139",
-                    "entries": [
-                        {
-                            "brand": "SMART TAG (ID Tag)",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "201-537-5644"
-                                }
-                            ],
-                            "notes": [
-                                "Info if unenrolled."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "900164",
-                    "entries": [
-                        {
-                            "brand": "SAVE THIS LIFE + MULTIPLE UNK VENDORS",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "855-777-2447 (Save This Life)"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "900215",
-                    "entries": [
-                        {
-                            "brand": "Sold direct to consumer from Amazon",
-                            "contacts": [
-                                {
-                                    "type": "web",
-                                    "value": "isenvo.com",
-                                    "text": "isenvo.com"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "900223",
-                    "entries": [
-                        {
-                            "brand": "Get Me Known",
-                            "contacts": [
-                                {
-                                    "type": "web",
-                                    "value": "https://www.getmeknown.co.za/",
-                                    "text": "GetMeKnown.co.za"
-                                }
-                            ]
-                        },
-                        {
-                            "brand": "Five Star ID",
-                            "contacts": [
-                                {
-                                    "type": "web",
-                                    "value": "https://www.fivestarid.co.za/",
-                                    "text": "FiveStarID.co.za"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "900235",
-                    "entries": [
-                        {
-                            "brand": "FiNano",
-                            "contacts": [
-                                {
-                                    "type": "web",
-                                    "value": "nano.tryfi.com/",
-                                    "text": "nano.tryfi.com"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "900250",
-                    "entries": [
-                        {
-                            "brand": "FURREKA",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "844-387-7352"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "901017",
-                    "entries": [
-                        {
-                            "brand": "UI Devices",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "224-444-8484"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "911",
-                    "entries": [
-                        {
-                            "brand": "911PETCHIP/FREE PET CHIP REGISTRY",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "888-546-7615"
-                                }
-                            ],
-                            "notes": [
-                                "Info if unenrolled."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "927",
-                    "entries": [
-                        {
-                            "brand": "Flucky (Humanada S.A. de C.V.) MEXICO",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "+52 614 142 6826"
-                                },
-                                {
-                                    "type": "email",
-                                    "value": "info@flucky.com.mx"
-                                },
-                                {
-                                    "type": "web",
-                                    "value": "www.flucky.com.mx",
-                                    "text": "www.flucky.com.mx"
-                                }
-                            ],
-                            "notes": [
-                                "Info if unenrolled."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "932",
-                    "entries": [
-                        {
-                            "brand": "LAMBERT VET SUPPLY (ADEQID)",
-                            "contacts": [],
-                            "notes": [
-                                "No registry kept."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "933",
-                    "entries": [
-                        {
-                            "brand": "BUDDY ID (Microchip ID Systems)",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "800-434-2843"
-                                }
-                            ],
-                            "notes": [
-                                "Info if unenrolled.",
-                                "(933007125056789 test chip).",
-                                "Also check Get Me Known: https://www.getmeknown.co.za/"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "939",
-                    "entries": [
-                        {
-                            "brand": "MICROCHIP 4 SOLUTIONS",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "877-738-4384"
-                                }
-                            ]
-                        },
-                        {
-                            "brand": "Electrinet (MEXICO) sells to FCM.mx",
-                            "contacts": [
-                                {
-                                    "type": "web",
-                                    "text": "Use contact form on bottom of FCM.mx",
-                                    "value": "http://FCM.mx"
-                                }
-                            ],
-                            "notes": [
-                                "Some 939 chips are sold to Mexico."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "941",
-                    "entries": [
-                        {
-                            "brand": "PETKEY",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "866-699-3463"
-                                }
-                            ]
-                        },
-                        {
-                            "brand": "24 PETWATCH",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "866-597-2424"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "944",
-                    "entries": [
-                        {
-                            "brand": "Micro-ID (UK)",
-                            "contacts": [
-                                {
-                                    "type": "web",
-                                    "value": "http://www.iso-944.com/",
-                                    "text": "www.iso-944.com"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "952",
-                    "entries": [
-                        {
-                            "brand": "MICROCHIP 4 SOLUTIONS",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "877-738-4384"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "953",
-                    "entries": [
-                        {
-                            "brand": "Virbac BackHome",
-                            "contacts": [
-                                {
-                                    "type": "web",
-                                    "value": "https://findmychip.co.za/",
-                                    "text": "findmychip.co.za"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "956",
-                    "entries": [
-                        {
-                            "brand": "AKC Reunite",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "800-252-7894"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "963084",
-                    "entries": [
-                        {
-                            "brand": "Saving-Life",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "888-577-7938"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "965",
-                    "entries": [
-                        {
-                            "brand": "BUDDY ID (Microchip ID Systems)",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "800-434-2843"
-                                }
-                            ],
-                            "notes": [
-                                "Info if unenrolled."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "967",
-                    "entries": [
-                        {
-                            "brand": "IDENTRAC",
-                            "contacts": [
-                                {
-                                    "type": "email",
-                                    "value": "info@identrac.ca"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "968",
-                    "entries": [
-                        {
-                            "brand": "SAINT (PET PARENT)",
-                            "contacts": [
-                                {
-                                    "type": "email",
-                                    "value": "info@aapp-pets.org"
-                                }
-                            ]
-                        },
-                        {
-                            "brand": "French Canadian aZoo.me",
-                            "contacts": [
-                                {
-                                    "type": "email",
-                                    "value": "info@aZoo.me"
-                                }
-                            ]
-                        },
-                        {
-                            "brand": "Saving-Life",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "888-577-7938"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "977",
-                    "entries": [
-                        {
-                            "brand": "AVID",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "800-336-2843"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "978",
-                    "entries": [
-                        {
-                            "brand": "Virbac BackHome",
-                            "contacts": [
-                                {
-                                    "type": "web",
-                                    "value": "https://findmychip.co.za/",
-                                    "text": "findmychip.co.za"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "981010",
-                    "entries": [
-                        {
-                            "brand": "Banfield",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "800-838-6738"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "98102",
-                    "entries": [
-                        {
-                            "brand": "PETLINK (Datamars formerly Bayer ResQ)",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "877-738-5465"
-                                }
-                            ]
-                        },
-                        {
-                            "brand": "24PETWATCH (formerly found animals)",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "866-597-2424"
-                                }
-                            ]
-                        }
-                    ],
-                    "generalNote": "Applies to prefixes 98102, 98103."
-                },
-                {
-                    "prefix": "98103",
-                    "_aliasFor": "98102"
-                },
-                {
-                    "prefix": "981100",
-                    "entries": [
-                        {
-                            "brand": "Possibly Datamars or 'Dog ID'",
-                            "contacts": [],
-                            "notes": [
-                                "Check https://www.europetnet.org/ and Petmaxx"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "982",
-                    "entries": [
-                        {
-                            "brand": "24PETWATCH",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "866-597-2424"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "985",
-                    "entries": [
-                        {
-                            "brand": "HOME AGAIN",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "888-466-3242"
-                                }
-                            ],
-                            "notes": [
-                                "Any chip beginning 985170 or 985191 with no shipping info is a test chip."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "987",
-                    "entries": [
-                        {
-                            "brand": "SMART TAG (ID Tag)",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "201-537-5644"
-                                }
-                            ],
-                            "notes": [
-                                "Info if unenrolled."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "990",
-                    "entries": [
-                        {
-                            "brand": "NANOCHIPID.com",
-                            "contacts": [
-                                {
-                                    "type": "web",
-                                    "text": "Online only",
-                                    "value": "http://NANOCHIPID.com"
-                                }
-                            ],
-                            "notes": [
-                                "Info if unenrolled."
-                            ]
-                        },
-                        {
-                            "brand": "VIAGUARD",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "877-842-4827"
-                                }
-                            ],
-                            "notes": [
-                                "No info if unenrolled."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "991",
-                    "entries": [
-                        {
-                            "brand": "SAVE THIS LIFE",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "855-777-2447"
-                                }
-                            ],
-                            "notes": [
-                                "Check STL website/call."
-                            ]
-                        },
-                        {
-                            "brand": "911PETCHIP/ FREE PET CHIP REGISTRY",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "888-546-7615"
-                                }
-                            ],
-                            "notes": [
-                                "Info if unenrolled."
-                            ]
-                        },
-                        {
-                            "brand": "PEEVA",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "833-733-8226"
-                                }
-                            ],
-                            "notes": [
-                                "No info if unenrolled."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "992",
-                    "entries": [
-                        {
-                            "brand": "ACA MARRS",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "800-992-0571"
-                                }
-                            ],
-                            "notes": [
-                                "No info if unenrolled."
-                            ]
-                        },
-                        {
-                            "brand": "INTERNATIONAL PET REGISTRY",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "844-477-7387"
-                                }
-                            ],
-                            "notes": [
-                                "Info if unenrolled, but manufacturer may sell transponders direct to consumer & then there is no record. You must check."
-                            ]
-                        },
-                        {
-                            "brand": "NANOCHIPID.com",
-                            "contacts": [
-                                {
-                                    "type": "web",
-                                    "value": "http://NANOCHIPID.com",
-                                    "text": "NANOCHIPID.com"
-                                }
-                            ],
-                            "notes": []
-                        },
-                        {
-                            "brand": "PETKEY",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "866-699-3463"
-                                }
-                            ],
-                            "notes": []
-                        },
-                        {
-                            "brand": "SMART TRAC",
-                            "contacts": [
-                                {
-                                    "type": "web",
-                                    "value": "http://PETMAXX.COM",
-                                    "text": "PETMAXX.COM"
-                                }
-                            ],
-                            "notes": []
-                        },
-                        {
-                            "brand": "24 PETWATCH",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "866-597-2424"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "99",
-                    "entries": [
-                        {
-                            "brand": "ACA MARRS",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "800-992-0571"
-                                }
-                            ],
-                            "notes": [
-                                "No info if unenrolled."
-                            ]
-                        },
-                        {
-                            "brand": "INTERNATIONAL PET REGISTRY",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "844-477-7387"
-                                }
-                            ],
-                            "notes": [
-                                "Info if unenrolled, but manufacturer may sell transponders direct to consumer & then there is no record. You must check."
-                            ]
-                        }
-                    ],
-                    "generalNote": "For 15-digit chips starting '99' not otherwise listed. (One batch of 999 were test chips & should not have been released. Report these rogue 999 chips to andie@icar.org)"
-                },
-                {
-                    "prefix": "AVID9DIGIT",
-                    "entries": [
-                        {
-                            "brand": "AVID",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "800-336-2843"
-                                }
-                            ],
-                            "notes": [
-                                "This appears to be a 9-digit AVID numeric chip."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "000",
-                    "entries": [
-                        {
-                            "brand": "AKC Reunite",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "800-252-7894"
-                                }
-                            ],
-                            "notes": [
-                                "Also check trovansearch.com"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "0A0",
-                    "entries": [
-                        {
-                            "brand": "Buddy ID",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "800-434-2843"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "0A1",
-                    "entries": [
-                        {
-                            "brand": "24PETWATCH",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "866-597-2424"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "0D0D",
-                    "entries": [
-                        {
-                            "brand": "BANFIELD (HOME AGAIN)",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "877-567-8738"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "1",
-                    "entries": [
-                        {
-                            "brand": "AVID",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "800-336-2843"
-                                }
-                            ],
-                            "notes": [
-                                "For 10-digit chips starting with '1'."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "4",
-                    "entries": [
-                        {
-                            "brand": "HOMEAGAIN",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "888-466-3242"
-                                }
-                            ],
-                            "notes": [
-                                "For 10-digit chips starting with '4'."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "7E1",
-                    "entries": [
-                        {
-                            "brand": "BUDDY ID (Microchip ID Systems)",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "800-434-2843"
-                                }
-                            ],
-                            "notes": [
-                                "Info if unenrolled."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "9A1",
-                    "entries": [
-                        {
-                            "brand": "24PETWATCH",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "866-597-2424"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "TR",
-                    "entries": [
-                        {
-                            "brand": "AKC Reunite (formerly Trovan)",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "800-252-7894"
-                                }
-                            ],
-                            "notes": []
-                        }
-                    ]
-                },
-                {
-                    "prefix": "AVID",
-                    "entries": [
-                        {
-                            "brand": "AVID",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "800-336-2843"
-                                }
-                            ],
-                            "notes": [
-                                "Alphanumeric AVID chip. Ensure number is entered correctly (e.g., AVIDxxxxxxxxx)."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "prefix": "900",
-                    "entries": [
-                        {
-                            "brand": "ACA MARRS",
-                            "contacts": [
-                                {
-                                    "type": "phone",
-                                    "value": "800-992-0571"
-                                }
-                            ],
-                            "notes": [
-                                "No info if unenrolled.",
-                                "This is for 15-digit chips starting '900' not covered by more specific '900xxx' prefixes. Other companies like Homeward Bound (844-643-4663) might also use '900' prefixes. Always check AAHA."
-                            ]
-                        }
-                    ]
-                }
+                { "prefix": "900032", "entries": [ { "brand": "UNKNOWN", "manufacturerWebsite": "https://www.getmeknown.co.za/", "contacts": [ { "type": "web", "value": "https://www.getmeknown.co.za/", "text": "Try GetMeKnown.co.za" } ], "notes": ["Mystery chip! If you know who sells these, let us know."] } ] },
+                { "prefix": "900074", "entries": [ { "brand": "SMART TAG (ID Tag)", "contacts": [ { "type": "phone", "value": "201-537-5644" } ], "notes": [ "Info if unenrolled." ] } ] },
+                { "prefix": "900085", "entries": [ { "brand": "PETSTABLISHED", "contacts": [ { "type": "phone", "value": "855-684-3184 ext 3" } ], "notes": [ "Info if unenrolled." ] }, { "brand": "HOMEWARDBOUND (Alternative)", "contacts": [ { "type": "phone", "value": "844-643-4663" } ] }, { "brand": "ONLINE AMAZON (REXID-PET.COM) (Alternative)", "contacts": [ { "type": "web", "value": "http://REXID-PET.COM", "text": "REXID-PET.COM" } ] } ] },
+                { "prefix": "900108", "entries": [ { "brand": "ViaGuard", "contacts": [ { "type": "phone", "value": "877-842-4827" } ], "notes": [ "No info if unenrolled." ] } ] },
+                { "prefix": "900111", "entries": [ { "brand": "INTERNATIONAL PET REGISTRY (IPR)", "contacts": [ { "type": "phone", "value": "844-477-7387" } ], "notes": [ "Applies to prefixes 900111, 900113, 900115, 900118.", "Info if unenrolled, but manufacturer may sell transponders direct to consumer & then there is no record. You must check." ] } ] },
+                { "prefix": "900113", "_aliasFor": "900111" }, { "prefix": "900115", "_aliasFor": "900111" }, { "prefix": "900118", "_aliasFor": "900111" },
+                { "prefix": "900139", "entries": [ { "brand": "SMART TAG (ID Tag)", "contacts": [ { "type": "phone", "value": "201-537-5644" } ], "notes": [ "Info if unenrolled." ] } ] },
+                { "prefix": "900164", "entries": [ { "brand": "SAVE THIS LIFE + MULTIPLE UNK VENDORS", "contacts": [ { "type": "phone", "value": "855-777-2447 (Save This Life)" } ], "notes": [] } ] },
+                { "prefix": "900215", "entries": [ { "brand": "Sold direct to consumer from Amazon", "contacts": [ { "type": "web", "value": "isenvo.com", "text": "isenvo.com" } ], "notes": [] } ] },
+                { "prefix": "900223", "entries": [ { "brand": "Get Me Known", "contacts": [ { "type": "web", "value": "https://www.getmeknown.co.za/", "text": "GetMeKnown.co.za" } ] }, { "brand": "Five Star ID", "contacts": [ { "type": "web", "value": "https://www.fivestarid.co.za/", "text": "FiveStarID.co.za" } ] } ] },
+                { "prefix": "900235", "entries": [ { "brand": "FiNano", "contacts": [ { "type": "web", "value": "nano.tryfi.com/", "text": "nano.tryfi.com" } ], "notes": [] } ] },
+                { "prefix": "900250", "entries": [ { "brand": "FURREKA", "contacts": [ { "type": "phone", "value": "844-387-7352" } ], "notes": [] } ] },
+                { "prefix": "901017", "entries": [ { "brand": "UI Devices", "contacts": [ { "type": "phone", "value": "224-444-8484" } ], "notes": [] } ] },
+                { "prefix": "911", "entries": [ { "brand": "911PETCHIP/FREE PET CHIP REGISTRY", "contacts": [ { "type": "phone", "value": "888-546-7615" } ], "notes": [ "Info if unenrolled." ] } ] },
+                { "prefix": "927", "entries": [ { "brand": "Flucky (Humanada S.A. de C.V.) MEXICO", "contacts": [ { "type": "phone", "value": "+52 614 142 6826" }, { "type": "email", "value": "info@flucky.com.mx" }, { "type": "web", "value": "www.flucky.com.mx", "text": "www.flucky.com.mx" } ], "notes": [ "Info if unenrolled." ] } ] },
+                { "prefix": "932", "entries": [ { "brand": "LAMBERT VET SUPPLY (ADEQID)", "contacts": [], "notes": [ "No registry kept." ] } ] },
+                { "prefix": "933", "entries": [ { "brand": "BUDDY ID (Microchip ID Systems)", "contacts": [ { "type": "phone", "value": "800-434-2843" } ], "notes": [ "Info if unenrolled.", "(933007125056789 test chip).", "Also check Get Me Known: https://www.getmeknown.co.za/" ] } ] },
+                { "prefix": "939", "entries": [ { "brand": "MICROCHIP 4 SOLUTIONS", "contacts": [ { "type": "phone", "value": "877-738-4384" } ] }, { "brand": "Electrinet (MEXICO) sells to FCM.mx", "contacts": [ { "type": "web", "text": "Use contact form on bottom of FCM.mx", "value": "http://FCM.mx" } ], "notes": [ "Some 939 chips are sold to Mexico." ] } ] },
+                { "prefix": "941", "entries": [ { "brand": "PETKEY", "contacts": [ { "type": "phone", "value": "866-699-3463" } ] }, { "brand": "24 PETWATCH", "contacts": [ { "type": "phone", "value": "866-597-2424" } ] } ] },
+                { "prefix": "944", "entries": [ { "brand": "Micro-ID (UK)", "contacts": [ { "type": "web", "value": "http://www.iso-944.com/", "text": "www.iso-944.com" } ], "notes": [] } ] },
+                { "prefix": "952", "entries": [ { "brand": "MICROCHIP 4 SOLUTIONS", "contacts": [ { "type": "phone", "value": "877-738-4384" } ], "notes": [] } ] },
+                { "prefix": "953", "entries": [ { "brand": "Virbac BackHome", "contacts": [ { "type": "web", "value": "https://findmychip.co.za/", "text": "findmychip.co.za" } ], "notes": [] } ] },
+                { "prefix": "956", "entries": [ { "brand": "AKC Reunite", "manufacturerWebsite": "https://www.akcreunite.org/", "contacts": [ { "type": "phone", "value": "800-252-7894" } ], "relevantLinks": [ { "type": "Registration Portal", "url": "https://www.akcreunite.org/collarplan/collarplanol/CollarPlanOL.aspx", "text": "Enroll or Update Chip" }, { "type": "Support", "url": "https://www.akcreunite.org/contact-us/", "text": "Contact AKC Reunite" }, { "type": "FAQ", "url": "https://www.akcreunite.org/microchips/faqs/", "text": "Microchip FAQs" } ], "chipTechnology": "ISO 11784/11785 FDX-B", "primaryRegistries": ["AKC Reunite Database"], "notes": ["Offers lifetime enrollment options."] } ] },
+                { "prefix": "963084", "entries": [ { "brand": "Saving-Life", "contacts": [ { "type": "phone", "value": "888-577-7938" } ], "notes": [] } ] },
+                { "prefix": "965", "entries": [ { "brand": "BUDDY ID (Microchip ID Systems)", "contacts": [ { "type": "phone", "value": "800-434-2843" } ], "notes": [ "Info if unenrolled." ] } ] },
+                { "prefix": "967", "entries": [ { "brand": "IDENTRAC", "contacts": [ { "type": "email", "value": "info@identrac.ca" } ], "notes": [] } ] },
+                { "prefix": "968", "entries": [ { "brand": "SAINT (PET PARENT)", "contacts": [ { "type": "email", "value": "info@aapp-pets.org" } ] }, { "brand": "French Canadian aZoo.me", "contacts": [ { "type": "email", "value": "info@aZoo.me" } ] }, { "brand": "Saving-Life", "contacts": [ { "type": "phone", "value": "888-577-7938" } ] } ] },
+                { "prefix": "977", "entries": [ { "brand": "AVID", "contacts": [ { "type": "phone", "value": "800-336-2843" } ], "notes": [] } ] },
+                { "prefix": "978", "entries": [ { "brand": "Virbac BackHome", "contacts": [ { "type": "web", "value": "https://findmychip.co.za/", "text": "findmychip.co.za" } ], "notes": [] } ] },
+                { "prefix": "981010", "entries": [ { "brand": "Banfield", "contacts": [ { "type": "phone", "value": "800-838-6738" } ], "notes": [] } ] },
+                { "prefix": "98102", "entries": [ { "brand": "PETLINK (Datamars formerly Bayer ResQ)", "manufacturerWebsite": "https://www.petlink.net/", "contacts": [ { "type": "phone", "value": "877-738-5465" } ], "relevantLinks": [{ "type": "Registration Portal", "url": "https://www.petlink.net/owner/showCreateOrUpdatePet.spring", "text": "Register/Update PetLink Chip"}], "chipTechnology": "ISO FDX-B" } , { "brand": "24PETWATCH (formerly found animals)", "contacts": [ { "type": "phone", "value": "866-597-2424" } ] } ], "generalNote": "Applies to prefixes 98102, 98103." },
+                { "prefix": "98103", "_aliasFor": "98102" },
+                { "prefix": "981100", "entries": [ { "brand": "Possibly Datamars or 'Dog ID'", "contacts": [], "notes": [ "Check https://www.europetnet.org/ and Petmaxx" ] } ] },
+                { "prefix": "982", "entries": [ { "brand": "24PETWATCH", "contacts": [ { "type": "phone", "value": "866-597-2424" } ], "notes": [] } ] },
+                { "prefix": "985", "entries": [ { "brand": "HOME AGAIN", "manufacturerWebsite": "https://www.homeagain.com/", "contacts": [ { "type": "phone", "value": "888-466-3242" } ], "notes": [ "Any chip beginning 985170 or 985191 with no shipping info is a test chip." ] } ] },
+                { "prefix": "987", "entries": [ { "brand": "SMART TAG (ID Tag)", "contacts": [ { "type": "phone", "value": "201-537-5644" } ], "notes": [ "Info if unenrolled." ] } ] },
+                { "prefix": "990", "entries": [ { "brand": "NANOCHIPID.com", "contacts": [ { "type": "web", "text": "Online only", "value": "http://NANOCHIPID.com" } ], "notes": [ "Info if unenrolled." ] }, { "brand": "VIAGUARD", "contacts": [ { "type": "phone", "value": "877-842-4827" } ], "notes": [ "No info if unenrolled." ] } ] },
+                { "prefix": "991", "entries": [ { "brand": "SAVE THIS LIFE", "contacts": [ { "type": "phone", "value": "855-777-2447" } ], "notes": [ "Check STL website/call." ] }, { "brand": "911PETCHIP/ FREE PET CHIP REGISTRY", "contacts": [ { "type": "phone", "value": "888-546-7615" } ], "notes": [ "Info if unenrolled." ] }, { "brand": "PEEVA", "contacts": [ { "type": "phone", "value": "833-733-8226" } ], "notes": [ "No info if unenrolled." ] } ] },
+                { "prefix": "992", "entries": [ { "brand": "ACA MARRS", "contacts": [ { "type": "phone", "value": "800-992-0571" } ], "notes": [ "No info if unenrolled." ] }, { "brand": "INTERNATIONAL PET REGISTRY", "contacts": [ { "type": "phone", "value": "844-477-7387" } ], "notes": [ "Info if unenrolled, but manufacturer may sell transponders direct to consumer & then there is no record. You must check." ] }, { "brand": "NANOCHIPID.com", "contacts": [ { "type": "web", "value": "http://NANOCHIPID.com", "text": "NANOCHIPID.com" } ], "notes": [] }, { "brand": "PETKEY", "contacts": [ { "type": "phone", "value": "866-699-3463" } ], "notes": [] }, { "brand": "SMART TRAC", "contacts": [ { "type": "web", "value": "http://PETMAXX.COM", "text": "PETMAXX.COM" } ], "notes": [] }, { "brand": "24 PETWATCH", "contacts": [ { "type": "phone", "value": "866-597-2424" } ], "notes": [] } ] },
+                { "prefix": "99", "entries": [ { "brand": "ACA MARRS", "contacts": [ { "type": "phone", "value": "800-992-0571" } ], "notes": [ "No info if unenrolled." ] }, { "brand": "INTERNATIONAL PET REGISTRY", "contacts": [ { "type": "phone", "value": "844-477-7387" } ], "notes": [ "Info if unenrolled, but manufacturer may sell transponders direct to consumer & then there is no record. You must check." ] } ], "generalNote": "For 15-digit chips starting '99' not otherwise listed. (One batch of 999 were test chips & should not have been released. Report these rogue 999 chips to andie@icar.org)" },
+                { "prefix": "AVID9DIGIT", "entries": [ { "brand": "AVID", "contacts": [ { "type": "phone", "value": "800-336-2843" } ], "notes": [ "This appears to be a 9-digit AVID numeric chip." ] } ] },
+                { "prefix": "000", "entries": [ { "brand": "AKC Reunite", "manufacturerWebsite": "https://www.akcreunite.org/", "contacts": [ { "type": "phone", "value": "800-252-7894" } ], "notes": [ "Also check trovansearch.com" ] } ] },
+                { "prefix": "0A0", "entries": [ { "brand": "Buddy ID", "contacts": [ { "type": "phone", "value": "800-434-2843" } ], "notes": [] } ] },
+                { "prefix": "0A1", "entries": [ { "brand": "24PETWATCH", "contacts": [ { "type": "phone", "value": "866-597-2424" } ], "notes": [] } ] },
+                { "prefix": "0D0D", "entries": [ { "brand": "BANFIELD (HOME AGAIN)", "contacts": [ { "type": "phone", "value": "877-567-8738" } ], "notes": [] } ] },
+                { "prefix": "1", "entries": [ { "brand": "AVID", "contacts": [ { "type": "phone", "value": "800-336-2843" } ], "notes": [ "For 10-digit chips starting with '1'." ] } ] },
+                { "prefix": "4", "entries": [ { "brand": "HOMEAGAIN", "contacts": [ { "type": "phone", "value": "888-466-3242" } ], "notes": [ "For 10-digit chips starting with '4'." ] } ] },
+                { "prefix": "7E1", "entries": [ { "brand": "BUDDY ID (Microchip ID Systems)", "contacts": [ { "type": "phone", "value": "800-434-2843" } ], "notes": [ "Info if unenrolled." ] } ] },
+                { "prefix": "9A1", "entries": [ { "brand": "24PETWATCH", "contacts": [ { "type": "phone", "value": "866-597-2424" } ], "notes": [] } ] },
+                { "prefix": "TR", "entries": [ { "brand": "AKC Reunite (formerly Trovan)", "contacts": [ { "type": "phone", "value": "800-252-7894" } ], "notes": [] } ] },
+                { "prefix": "AVID", "entries": [ { "brand": "AVID (American Veterinary Identification Devices)", "manufacturer": "AVID", "manufacturerWebsite": "https://www.avidid.com/", "contacts": [ { "type": "phone", "value": "800-336-2843", "text": "Customer Service" }, { "type": "web", "value": "www.avidid.com", "text": "AVID Official Website" }, { "type": "address", "value": "3179 Hamner Ave, Norco, CA 92860, USA", "text": "AVID Corporate Office"}, { "type": "fax", "value": "951-737-8967"} ], "relevantLinks": [ { "type": "Registration Portal", "url": "https://www.pettrac.org/", "text": "PetTrac Recovery Network (AVID Registry)" }, { "type": "Support", "url": "https://www.avidid.com/support", "text": "AVID Support & FAQ" }, { "type": "Product Info", "url": "https://www.avidid.com/products", "text": "AVID Microchip Products" } ], "chipTechnology": ["AVID Encrypted (9-digit, 10-digit alphanumeric)", "ISO FDX-B (some newer chips)"], "primaryRegistries": ["PetTrac (AVID)"], "notes": [ "Alphanumeric AVID chip. Ensure number is entered correctly (e.g., AVIDxxxxxxxxx).", "AVID also manufactures ISO-compatible chips." ] } ] },
+                { "prefix": "900", "entries": [ { "brand": "ACA MARRS", "contacts": [ { "type": "phone", "value": "800-992-0571" } ], "notes": [ "No info if unenrolled.", "This is for 15-digit chips starting '900' not covered by more specific '900xxx' prefixes. Other companies like Homeward Bound (844-643-4663) might also use '900' prefixes. Always check AAHA." ] } ] }
             ];
-            // --- END EMBEDDED DATA ---
-
             try {
                 manufacturersData = embeddedMicrochipData;
-                
                 manufacturersData.forEach(item => {
                     if (item._aliasFor) {
                         const target = manufacturersData.find(targetItem => targetItem.prefix === item._aliasFor);
-                        if (target) {
-                            aliasMap.set(item.prefix, target);
-                        }
+                        if (target) aliasMap.set(item.prefix, target);
                     }
                 });
-                
-                // Use all data for matching, including aliases, then sort.
-                resolvedManufacturersData = [...manufacturersData];
-
-                resolvedManufacturersData.sort((a, b) => {
+                resolvedManufacturersData = [...manufacturersData].sort((a, b) => {
                     const lenA = a.prefix === "AVID9DIGIT" ? 9.5 : a.prefix.length; 
                     const lenB = b.prefix === "AVID9DIGIT" ? 9.5 : b.prefix.length;
-                    if (lenB !== lenA) {
-                        return lenB - lenA; 
-                    }
+                    if (lenB !== lenA) return lenB - lenA;
                     if (typeof a.prefix === 'string' && typeof b.prefix === 'string') {
-                        if (a.prefix.match(/^[A-Z]+$/) && b.prefix.match(/^\d+$/)) return -1; 
-                        if (a.prefix.match(/^\d+$/) && b.prefix.match(/^[A-Z]+$/)) return 1;  
+                        if (a.prefix.match(/^[A-Z]+$/) && b.prefix.match(/^\d+$/)) return -1;
+                        if (a.prefix.match(/^\d+$/) && b.prefix.match(/^[A-Z]+$/)) return 1;
                     }
                     return 0;
                 });
-
                 dataLoadingMessage.style.display = 'none';
                 lookupInterface.style.display = 'block';
                 lookupButton.disabled = false;
-
             } catch (error) {
                 console.error("Failed to process microchip data:", error);
                 dataLoadingMessage.style.display = 'none';
@@ -1374,6 +482,7 @@
             clearInputButton.style.display = 'none';
             inputErrorDiv.style.display = 'none';
             resultsArea.style.display = 'none';
+            directLookupLinksArea.style.display = 'none'; // Hide direct links too
             microchipInput.focus();
         });
         
@@ -1395,6 +504,18 @@
             }
         });
 
+        function populateDirectLookupLinks(chipId) {
+            directLookupListUl.innerHTML = ''; // Clear previous links
+            directLookupServices.forEach(service => {
+                const li = document.createElement('li');
+                li.className = 'direct-lookup-list-item';
+                const url = service.urlTemplate.replace('{chip_id}', encodeURIComponent(chipId));
+                li.innerHTML = `<i class="${service.icon || 'fas fa-search'}"></i> <a href="${url}" target="_blank" rel="noopener noreferrer">${service.name}</a>`;
+                directLookupListUl.appendChild(li);
+            });
+            directLookupLinksArea.style.display = 'block';
+        }
+
         lookupButton.addEventListener('click', () => {
             if (resolvedManufacturersData.length === 0) {
                 inputErrorDiv.textContent = 'Microchip data is not loaded. Please wait or refresh.';
@@ -1402,6 +523,7 @@
                 return;
             }
             const rawChipNumber = microchipInput.value.trim();
+            // Reset UI elements
             inputErrorDiv.style.display = 'none'; 
             resultsArea.style.display = 'none'; 
             chipInfoOutputDiv.innerHTML = ''; 
@@ -1410,6 +532,8 @@
             testChipWarningDiv.style.display = 'none';
             copyChipButton.style.display = 'none';
             copyFeedbackSpan.textContent = '';
+            directLookupLinksArea.style.display = 'none'; // Hide direct links initially
+            directLookupListUl.innerHTML = ''; // Clear old links
             loader.style.display = 'block';
 
             if (!rawChipNumber) {
@@ -1432,6 +556,9 @@
                 return;
             }
             
+            // Populate direct lookup links as soon as chip number is validated
+            populateDirectLookupLinks(chipNumber);
+
             setTimeout(() => {
                 let matches = [];
                 let isTestChip = false;
@@ -1455,13 +582,10 @@
                 
                 if(matches.length === 0) {
                     for (const mfrData of resolvedManufacturersData) {
-                        if (mfrData.prefix === "AVID9DIGIT" || mfrData.prefix === "AVID") continue; 
-                        
+                        if (mfrData.prefix === "AVID9DIGIT" || mfrData.prefix === "AVID" || mfrData._aliasFor) continue; 
                         if (chipNumber.startsWith(mfrData.prefix)) {
-                            if ((mfrData.prefix === "1" || mfrData.prefix === "4") && chipNumber.length !== 10) {
-                                continue;
-                            }
-                             matches.push(mfrData);
+                            if ((mfrData.prefix === "1" || mfrData.prefix === "4") && chipNumber.length !== 10) continue;
+                            matches.push(mfrData);
                             break; 
                         }
                     }
@@ -1476,66 +600,96 @@
                     testChipWarningDiv.innerHTML = `<i class="fas fa-exclamation-triangle mr-2"></i><strong>Test Chip Warning:</strong> ${testChipNote}`;
                     testChipWarningDiv.style.display = 'block';
                 }
-
+                
+                // Display manufacturer info if found
                 if (matches.length > 0) {
+                    chipInfoOutputDiv.style.display = 'block'; // Ensure this is visible
                     matches.forEach(match => {
                         const currentMatchData = aliasMap.get(match.prefix) || match; 
-
                         if (currentMatchData.generalNote) {
                             const generalNoteEl = document.createElement('p');
                             generalNoteEl.className = 'result-item italic mb-3 text-sm text-gray-600';
                             generalNoteEl.innerHTML = `<strong>Note for prefix ${currentMatchData.prefix}:</strong> ${currentMatchData.generalNote}`;
                             chipInfoOutputDiv.appendChild(generalNoteEl);
                         }
-                        
                         if (!currentMatchData.entries) return;
 
                         currentMatchData.entries.forEach(entry => {
                             const entryDiv = document.createElement('div');
                             entryDiv.className = 'result-entry';
-                            
                             let content = `<h3>${entry.brand}</h3>`;
+                            
+                            let manufacturerDetailsContent = '';
                             if (entry.manufacturer && entry.manufacturer !== entry.brand) {
-                                content += `<p class="result-item"><strong>Manufacturer:</strong> ${entry.manufacturer}</p>`;
+                                manufacturerDetailsContent += `<p class="result-item"><strong>Manufacturer:</strong> <span>${entry.manufacturer}</span></p>`;
+                            }
+                            if (entry.manufacturerWebsite) {
+                                const webLink = entry.manufacturerWebsite.startsWith('http') ? entry.manufacturerWebsite : `http://${entry.manufacturerWebsite}`;
+                                manufacturerDetailsContent += `<p class="result-item"><strong>Website:</strong> <span><a href="${webLink}" target="_blank" rel="noopener noreferrer">${entry.manufacturerWebsite}</a></span></p>`;
+                            }
+                             if (entry.chipTechnology) {
+                                const tech = Array.isArray(entry.chipTechnology) ? entry.chipTechnology.join(', ') : entry.chipTechnology;
+                                manufacturerDetailsContent += `<p class="result-item"><strong>Technology:</strong> <span>${tech}</span></p>`;
+                            }
+                            if (manufacturerDetailsContent) {
+                                content += `<div class="manufacturer-details-section"><h4>Manufacturer Details</h4>${manufacturerDetailsContent}</div>`;
+                            }
+
+                            if (entry.contacts && entry.contacts.length > 0) {
+                                let contactsContent = '<h4>Contact Information</h4>';
+                                entry.contacts.forEach(contact => {
+                                    let icon = '', link = contact.value, displayValue = contact.text || contact.value, contactLine = '';
+                                    switch (contact.type) {
+                                        case 'phone': icon = '<i class="fas fa-phone fa-fw"></i>'; link = `tel:${contact.value.replace(/[^0-9+]/g, '')}`; contactLine = `<a href="${link}" target="_blank" rel="noopener noreferrer">${displayValue}</a>`; break;
+                                        case 'web': icon = '<i class="fas fa-globe fa-fw"></i>'; link = contact.value.startsWith('http') ? contact.value : `http://${contact.value}`; contactLine = `<a href="${link}" target="_blank" rel="noopener noreferrer">${displayValue}</a>`; break;
+                                        case 'email': icon = '<i class="fas fa-envelope fa-fw"></i>'; link = `mailto:${contact.value}`; contactLine = `<a href="${link}" target="_blank" rel="noopener noreferrer">${displayValue}</a>`; break;
+                                        case 'address': icon = '<i class="fas fa-map-marker-alt fa-fw"></i>'; if (typeof displayValue === 'string') { link = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(displayValue)}`; contactLine = `<a href="${link}" target="_blank" rel="noopener noreferrer">${displayValue}</a>`; } else { contactLine = `${displayValue}`; } break;
+                                        case 'fax': icon = '<i class="fas fa-fax fa-fw"></i>'; contactLine = `${displayValue}`; break;
+                                        default: icon = '<i class="fas fa-info-circle fa-fw"></i>'; contactLine = `${displayValue}`;
+                                    }
+                                    contactsContent += `<p class="result-item">${icon}<span>${contactLine}</span></p>`;
+                                });
+                                content += `<div class="contact-section">${contactsContent}</div>`;
                             }
                             
-                            let hasContacts = entry.contacts && entry.contacts.length > 0;
-                            let hasNotes = entry.notes && entry.notes.length > 0;
-
-                            if (hasContacts) {
-                                content += '<div class="contact-section"><p class="result-item"><strong>Contacts:</strong></p>';
-                                entry.contacts.forEach(contact => {
-                                    let icon = '';
-                                    let link = contact.value;
-                                    let displayValue = contact.text || contact.value;
-                                    if (contact.type === 'phone') {
-                                        icon = '<i class="fas fa-phone"></i>';
-                                        link = `tel:${contact.value.replace(/[^0-9+]/g, '')}`;
-                                    } else if (contact.type === 'web') {
-                                        icon = '<i class="fas fa-globe"></i>';
-                                        link = contact.value.startsWith('http') ? contact.value : `http://${contact.value}`;
-                                    } else if (contact.type === 'email') {
-                                        icon = '<i class="fas fa-envelope"></i>';
-                                        link = `mailto:${contact.value}`;
-                                    }
-                                    content += `<p class="result-item ml-4">${icon}<a href="${link}" target="_blank" rel="noopener noreferrer">${displayValue}</a></p>`;
+                            let additionalInfoContent = '';
+                            if (entry.relevantLinks && entry.relevantLinks.length > 0) {
+                                additionalInfoContent += `<h5>Relevant Links:</h5><ul class="relevant-links-list">`;
+                                entry.relevantLinks.forEach(rLink => {
+                                    const webLink = rLink.url.startsWith('http') ? rLink.url : `http://${rLink.url}`;
+                                    let linkIcon = '<i class="fas fa-link"></i>'; 
+                                    if (rLink.type.toLowerCase().includes("registration")) linkIcon = '<i class="fas fa-id-card"></i>';
+                                    else if (rLink.type.toLowerCase().includes("support")) linkIcon = '<i class="fas fa-headset"></i>';
+                                    else if (rLink.type.toLowerCase().includes("product")) linkIcon = '<i class="fas fa-box-open"></i>';
+                                    else if (rLink.type.toLowerCase().includes("faq")) linkIcon = '<i class="fas fa-question-circle"></i>';
+                                    additionalInfoContent += `<li>${linkIcon} <a href="${webLink}" target="_blank" rel="noopener noreferrer">${rLink.text}</a> (${rLink.type})</li>`;
                                 });
-                                content += '</div>';
+                                additionalInfoContent += '</ul>';
+                            }
+                             if (entry.primaryRegistries && entry.primaryRegistries.length > 0) {
+                                additionalInfoContent += `<h5 class="mt-3">Primary Registries:</h5><ul class="registries-list">`;
+                                entry.primaryRegistries.forEach(registry => { additionalInfoContent += `<li>${registry}</li>`; });
+                                additionalInfoContent += '</ul>';
+                            }
+                            if (additionalInfoContent) {
+                                content += `<div class="additional-info-section"><h4>Additional Information</h4>${additionalInfoContent}</div>`;
                             }
 
-                            if (hasNotes) {
-                                content += `<div class="${hasContacts ? 'notes-section' : ''}"><p class="result-item"><strong>Notes:</strong></p><ul class="notes-list">`;
+                            if (entry.notes && entry.notes.length > 0) {
+                                let notesContent = '<h4>Notes</h4><ul class="notes-list">';
                                 entry.notes.forEach(note => {
                                     const noteWithLinks = note.replace(/(https?:\/\/[^\s!"'<>()]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
-                                    content += `<li>${noteWithLinks}</li>`;
+                                    notesContent += `<li>${noteWithLinks}</li>`;
                                 });
-                                content += '</ul></div>';
+                                notesContent += '</ul>';
+                                content += `<div class="notes-section">${notesContent}</div>`;
                             }
                             entryDiv.innerHTML = content;
                             chipInfoOutputDiv.appendChild(entryDiv);
                         });
                     });
-                } else {
+                } else { // No manufacturer match found
+                    chipInfoOutputDiv.style.display = 'none'; // Hide the manufacturer info section
                     notFoundMessageDiv.style.display = 'block';
                     if (!chipNumber.startsWith('9') && !chipNumber.startsWith('AVID') && 
                         !['000','0A0','0A1','0D0D','1','4','7E1','9A1','TR'].some(p => chipNumber.startsWith(p))) {
@@ -1548,9 +702,7 @@
         microchipInput.addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault(); 
-                if (!lookupButton.disabled) { 
-                    lookupButton.click();
-                }
+                if (!lookupButton.disabled) lookupButton.click();
             }
         });
 
@@ -1558,3 +710,4 @@
     </script>
 </body>
 </html>
+
