@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal Pet Microchip Lookup Tool (Conceptual Live Demo)</title>
+    <title>Universal Pet Microchip Lookup Tool (Enhanced Links & Copy)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
         }
-        /* Custom styles for better visual feedback */
         .result-card {
             @apply bg-white p-6 rounded-lg shadow-lg mb-6 transition-all duration-300 ease-in-out;
         }
@@ -24,7 +23,7 @@
             @apply text-blue-500 hover:text-blue-700 underline;
         }
         .note {
-            @apply mt-2 p-3 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-md text-sm;
+            @apply mt-2 p-3 rounded-md text-sm; /* Base class for notes */
         }
         .error-message {
             @apply mt-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-md;
@@ -39,10 +38,25 @@
             @apply text-lg font-semibold mb-3 text-green-700;
         }
         .live-lookup-item {
-            @apply p-3 mb-2 border border-gray-200 rounded-md bg-gray-50;
+            @apply p-3 mb-2 border rounded-md; 
         }
         .live-lookup-item strong {
             @apply text-gray-800;
+        }
+        .critical-steps-list li {
+            @apply mb-2 flex items-start; /* For icon alignment */
+        }
+        .critical-steps-list i {
+            @apply mr-2 mt-1 text-green-600; /* Icon styling */
+        }
+        .critical-steps-list a {
+            @apply text-green-700 hover:text-green-900 font-medium;
+        }
+        #copyChipButton {
+            @apply p-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-r-md transition-colors duration-150 ease-in-out border border-l-0 border-gray-300;
+        }
+        #copyMessage {
+            @apply text-sm text-green-600 ml-2 opacity-0 transition-opacity duration-500;
         }
     </style>
 </head>
@@ -51,21 +65,25 @@
     <div class="container mx-auto max-w-2xl bg-white p-8 rounded-xl shadow-2xl">
         <header class="text-center mb-8">
             <h1 class="text-4xl font-bold text-indigo-700">Universal Pet Microchip Lookup</h1>
-            <p class="text-gray-600 mt-2">Identify potential microchip manufacturers and simulate live registration checks.</p>
+            <p class="text-gray-600 mt-2">Identify potential microchip manufacturers and simulate live registration checks with direct lookup links.</p>
             <div class="mt-2 p-3 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-md text-sm">
                 <i class="fas fa-exclamation-triangle mr-2"></i>
-                <strong>Disclaimer:</strong> This tool suggests manufacturers based on prefixes. The "Live Registration Status" is a simulation and DOES NOT query real databases.
+                <strong>Disclaimer:</strong> This tool suggests manufacturers based on prefixes. The "Live Registration Status" is a simulation and DOES NOT query real databases. Always verify with official sources.
             </div>
         </header>
 
         <div class="mb-6">
             <label for="microchipNumber" class="block text-sm font-medium text-gray-700 mb-1">Enter Microchip Number:</label>
-            <div class="flex">
+            <div class="flex items-center">
                 <input type="text" id="microchipNumber" name="microchipNumber" class="mt-1 block w-full rounded-l-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3" placeholder="e.g., 985121000000000">
-                <button id="lookupButton" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-r-md transition-colors duration-150 ease-in-out">
+                <button id="copyChipButton" title="Copy Chip Number" class="mt-1">
+                    <i class="fas fa-copy"></i>
+                </button>
+                <button id="lookupButton" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-r-md transition-colors duration-150 ease-in-out mt-1 ml-[-1px]"> {/* Adjusted margin for seamless look */}
                     <i class="fas fa-search mr-2"></i>Lookup
                 </button>
             </div>
+            <span id="copyMessage">Chip number copied!</span>
         </div>
 
         <div id="results" class="mt-6">
@@ -74,16 +92,24 @@
         <div id="live-registration-results-container" class="mt-8 hidden">
             </div>
 
-        <div id="critical-next-steps" class="mt-8 hidden p-4 bg-green-50 border-l-4 border-green-500 rounded-md">
-             <h3 class="text-xl font-semibold mb-2 text-green-700"><i class="fas fa-check-circle mr-2"></i>Critical Next Steps</h3>
-             <p class="text-green-800 mb-2">Identifying the manufacturer is only the first step. To find the owner, you MUST use comprehensive pet recovery services:</p>
-             <ul class="list-disc list-inside text-green-800 space-y-1">
-                 <li><strong>AAHA Universal Pet Microchip Lookup:</strong> <a href="http://www.petmicrochiplookup.org" target="_blank" class="hover:underline">www.petmicrochiplookup.org</a> (Most crucial)</li>
-                 <li><strong>PetChip.info:</strong> <a href="https://www.petchip.info/" target="_blank" class="hover:underline">www.petchip.info</a> (Check if not found on AAHA)</li>
-                 <li><strong>International Databases:</strong> Consider Europetnet or PetMaxx if the chip seems international.</li>
+        <div id="critical-next-steps" class="mt-8 hidden p-6 bg-green-50 border-l-4 border-green-500 rounded-md">
+             <h3 class="text-xl font-semibold mb-3 text-green-700"><i class="fas fa-check-circle mr-2"></i>Critical Next Steps: Find the Owner</h3>
+             <p class="text-green-800 mb-3">Identifying the chip brand is only the first step. Use these resources to search actual registration databases. **Check multiple sources if the first one yields no results.**</p>
+             <ul class="list-none critical-steps-list text-green-800 space-y-1">
+                 <li><i class="fas fa-star text-yellow-500"></i><div><strong>AAHA Universal Pet Microchip Lookup:</strong> <a href="http://www.petmicrochiplookup.org" target="_blank" class="hover:underline">www.petmicrochiplookup.org</a> (Searches many, but not all, registries. <strong>Always start here.</strong>)</div></li>
+                 <li><i class="fas fa-link"></i><div><strong>PetLink:</strong> <a id="petlinkLookupLink" href="https://www.petlink.net/microchip-search/" target="_blank" class="hover:underline">PetLink Search</a></div></li>
+                 <li><i class="fas fa-link"></i><div><strong>HomeAgain:</strong> <a id="homeagainLookupLink" href="https://www.homeagain.com/chip-lookup/" target="_blank" class="hover:underline">HomeAgain Search</a></div></li>
+                 <li><i class="fas fa-link"></i><div><strong>AKC Reunite:</strong> <a id="akcLookupLink" href="https://www.akcreunite.org/microchip-lookup/" target="_blank" class="hover:underline">AKC Reunite Search</a></div></li>
+                 <li><i class="fas fa-link"></i><div><strong>Petkey:</strong> <a id="petkeyLookupLink" href="https://petkey.org/Microchip/" target="_blank" class="hover:underline">Petkey Search</a></div></li>
+                 <li><i class="fas fa-link"></i><div><strong>BuddyID:</strong> <a id="buddyidLookupLink" href="https://my.buddyid.com/results.php" target="_blank" class="hover:underline">BuddyID Search</a></div></li>
+                 <li><i class="fas fa-link"></i><div><strong>FreePetChipRegistry:</strong> <a id="freepetchipLookupLink" href="https://www.freepetchipregistry.com/found-pet" target="_blank" class="hover:underline">FreePetChipRegistry Search</a></div></li>
+                 <li><i class="fas fa-link"></i><div><strong>SaveThisLife:</strong> <a id="savethislifeLookupLink" href="https://www.savethislife.com/" target="_blank" class="hover:underline">SaveThisLife Search</a> (Check "Search Microchips")</div></li>
+                 <li><i class="fas fa-link"></i><div><strong>Nanochip ID:</strong> <a href="https://www.nanochipid.com/lookup/" target="_blank" class="hover:underline">Nanochip ID Lookup</a> (May require login/form)</div></li>
+                 <li><i class="fas fa-link"></i><div><strong>Petstablished:</strong> <a href="https://petstablished.com/microchip_lookup/" target="_blank" class="hover:underline">Petstablished Lookup</a> (Form-based)</div></li>
+                 <li><i class="fas fa-globe-americas"></i><div><strong>PetChip.info:</strong> <a href="https://www.petchip.info/" target="_blank" class="hover:underline">www.petchip.info</a> (Good for some non-AAHA participating registries)</div></li>
+                 <li><i class="fas fa-globe-europe"></i><div><strong>International (if applicable):</strong> Consider <a href="https://www.europetnet.com/" target="_blank">Europetnet</a> or <a href="https://www.petmaxx.com/" target="_blank">PetMaxx</a> if the chip seems international.</div></li>
              </ul>
         </div>
-
     </div>
 
     <div id="messageModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center hidden z-50">
@@ -105,29 +131,42 @@
         </div>
     </div>
 
-
     <script>
         // --- Mock Microchip Data (simulating microchip_data.json) ---
         const microchipData = {
             "prefixes": [
-                { "prefix": "985", "company": "Datamars / PetLink", "notes": "Commonly PetLink, also other brands. 15 digits.", "phone": "877-738-5465", "web": "www.petlink.net" },
-                { "prefix": "9810", "company": "AVID (US)", "notes": "10-digit AVID chips often start 9810. May also be 9-digit.", "phone": "800-336-2843", "web": "www.avidid.com" },
-                { "prefix": "900", "company": "AKC Reunite / EIDAP", "notes": "Can be AKC Reunite or other EIDAP brands. 15 digits.", "phone": "800-252-7894", "web": "www.akcreunite.org" },
+                { "prefix": "985", "company": "Datamars / PetLink", "notes": "Commonly PetLink. Also used by other brands. 15 digits. PetLink is a common registry.", "phone": "877-738-5465", "web": "www.petlink.net", "registry_search_url_template": "https://www.petlink.net/microchip-search/?microchip-number={chip_id}"},
+                { "prefix": "9810", "company": "AVID (US)", "notes": "10-digit AVID chips often start 9810. May also be 9-digit. AVID has its own registry.", "phone": "800-336-2843", "web": "www.avidid.com", "registry_search_url_template": "https://www.avidid.com/pet-owners/search"},
+                { "prefix": "900", "company": "AKC Reunite / EIDAP", "notes": "Can be AKC Reunite or other EIDAP brands. 15 digits. AKC Reunite is a common registry.", "phone": "800-252-7894", "web": "www.akcreunite.org", "registry_search_url_template": "https://www.akcreunite.org/microchip-lookup/?microchip_id={chip_id}" },
+                { "prefix": "956", "company": "HomeAgain / Merck", "notes": "Often HomeAgain. 15 digits. HomeAgain is a major registry.", "phone": "888-466-3242", "web": "www.homeagain.com", "registry_search_url_template": "https://www.homeagain.com/chip-lookup/results?prevPage=chipLookup&chipNumber={chip_id}"},
+                { "prefix": "933", "company": "BuddyID", "notes": "Often BuddyID / Microchip ID Systems. 15 digits.", "phone": "800-434-2843", "web": "www.buddyid.com", "registry_search_url_template": "https://my.buddyid.com/results.php?key={chip_id}"},
+                { "prefix": "941", "company": "Save This Life", "notes": "Often Save This Life. 15 digits.", "phone": "855-777-2447", "web": "www.savethislife.com", "registry_search_url_template": "https://www.savethislife.com/search-microchips/?chip_num={chip_id}"}, // Example, actual might differ
                 { "prefix": "TEST", "company": "Test Chip Inc.", "notes": "This is a known test chip pattern.", "phone": "N/A", "web": "N/A", "isTestChip": true }
             ],
             "shared_codes": {
-                "977": "Used by multiple smaller companies. Check AAHA."
+                "977": "Used by multiple smaller companies. Check AAHA and other broad lookups."
             },
-            "no_prefix_match_guidance": "No specific manufacturer prefix matched. This could be an international chip (check ISO country codes), a newer/rarer chip, or a typo. ALWAYS use AAHA Universal Lookup (petmicrochiplookup.org) and PetChip.info to search registration databases."
+            "no_prefix_match_guidance": "No specific manufacturer prefix matched. This could be an international chip (check ISO country codes), a newer/rarer chip, or a typo. ALWAYS use AAHA Universal Lookup (petmicrochiplookup.org) and other listed search tools."
         };
 
         // --- DOM Elements ---
         const microchipInput = document.getElementById('microchipNumber');
         const lookupButton = document.getElementById('lookupButton');
+        const copyChipButton = document.getElementById('copyChipButton');
+        const copyMessage = document.getElementById('copyMessage');
         const resultsDiv = document.getElementById('results');
         const liveResultsContainer = document.getElementById('live-registration-results-container');
         const criticalNextStepsDiv = document.getElementById('critical-next-steps');
         
+        const petlinkLookupLink = document.getElementById('petlinkLookupLink');
+        const homeagainLookupLink = document.getElementById('homeagainLookupLink');
+        const akcLookupLink = document.getElementById('akcLookupLink');
+        const petkeyLookupLink = document.getElementById('petkeyLookupLink');
+        const buddyidLookupLink = document.getElementById('buddyidLookupLink');
+        const freepetchipLookupLink = document.getElementById('freepetchipLookupLink');
+        const savethislifeLookupLink = document.getElementById('savethislifeLookupLink');
+
+
         // Modal elements
         const messageModal = document.getElementById('messageModal');
         const modalTitle = document.getElementById('modalTitle');
@@ -145,6 +184,8 @@
         closeModalButton.addEventListener('click', () => {
             messageModal.classList.add('hidden');
         });
+        copyChipButton.addEventListener('click', copyChipNumberToClipboard);
+
 
         // --- Functions ---
         function showModal(title, message, isError = true) {
@@ -152,12 +193,12 @@
             modalMessage.textContent = message;
             if (isError) {
                 modalIcon.innerHTML = '<i class="fas fa-times-circle text-red-600 text-2xl"></i>';
-                modalIcon.classList.remove('bg-green-100');
-                modalIcon.classList.add('bg-red-100');
+                modalIcon.classList.remove('bg-green-100', 'text-green-600');
+                modalIcon.classList.add('bg-red-100', 'text-red-600');
             } else {
                 modalIcon.innerHTML = '<i class="fas fa-check-circle text-green-600 text-2xl"></i>';
-                modalIcon.classList.remove('bg-red-100');
-                modalIcon.classList.add('bg-green-100');
+                modalIcon.classList.remove('bg-red-100', 'text-red-600');
+                modalIcon.classList.add('bg-green-100', 'text-green-600');
             }
             messageModal.classList.remove('hidden');
         }
@@ -165,6 +206,48 @@
         function sanitizeInput(chipNumber) {
             return chipNumber.replace(/[\s\-\*]/g, '').toUpperCase();
         }
+        
+        function copyChipNumberToClipboard() {
+            const chipNumber = sanitizeInput(microchipInput.value);
+            if (!chipNumber) {
+                showModal('Copy Error', 'Please enter a microchip number first.', true);
+                return;
+            }
+            // Using execCommand for broader compatibility in iFrames
+            const tempInput = document.createElement('input');
+            tempInput.style.position = 'absolute';
+            tempInput.style.left = '-9999px';
+            tempInput.value = chipNumber;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand('copy');
+                copyMessage.style.opacity = '1';
+                setTimeout(() => {
+                    copyMessage.style.opacity = '0';
+                }, 2000);
+            } catch (err) {
+                showModal('Copy Error', 'Failed to copy chip number. Please copy manually.', true);
+                console.error('Fallback: Oops, unable to copy', err);
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        function updateCriticalNextStepsLinks(chipId) {
+            const chipParam = chipId ? encodeURIComponent(chipId) : '';
+            petlinkLookupLink.href = `https://www.petlink.net/microchip-search/${chipParam ? '?microchip-number=' + chipParam : ''}`;
+            homeagainLookupLink.href = `https://www.homeagain.com/chip-lookup/${chipParam ? 'results?prevPage=chipLookup&chipNumber=' + chipParam : ''}`;
+            akcLookupLink.href = `https://www.akcreunite.org/microchip-lookup/${chipParam ? '?microchip_id=' + chipParam : ''}`;
+            petkeyLookupLink.href = `https://petkey.org/Microchip/${chipParam ? '?m=' + chipParam : ''}`;
+            buddyidLookupLink.href = `https://my.buddyid.com/results.php${chipParam ? '?key=' + chipParam : ''}`;
+            freepetchipLookupLink.href = `https://www.freepetchipregistry.com/found-pet${chipParam ? '?chip=' + chipParam : ''}`;
+            // SaveThisLife has a search page, but specific query param for direct result is less clear from main URL.
+            // If their search page accepts a query param like `?chip_num=`, it can be added.
+            savethislifeLookupLink.href = `https://www.savethislife.com/search-microchips/${chipParam ? '?chip_num=' + chipParam : ''}`;
+
+
+        }
+
 
         function handleLookup() {
             const rawChipNumber = microchipInput.value;
@@ -173,45 +256,40 @@
                 return;
             }
             const chipNumber = sanitizeInput(rawChipNumber);
-            resultsDiv.innerHTML = ''; // Clear previous manufacturer results
-            liveResultsContainer.innerHTML = ''; // Clear previous live results
+            resultsDiv.innerHTML = ''; 
+            liveResultsContainer.innerHTML = ''; 
             liveResultsContainer.classList.add('hidden');
             criticalNextStepsDiv.classList.add('hidden');
+            updateCriticalNextStepsLinks(chipNumber); 
 
 
-            // Display a loading indicator for manufacturer lookup
             resultsDiv.innerHTML = `
                 <div class="flex items-center justify-center result-card">
                     <div class="loading-spinner"></div>
                     <p>Looking up manufacturer...</p>
                 </div>`;
             
-            // Simulate fetching manufacturer data (as if from an external JSON file)
             setTimeout(() => {
-                lookupManufacturer(chipNumber);
-                // After manufacturer lookup, proceed to conceptual live registration check
-                fetchConceptualLiveRegistrationStatus(chipNumber);
+                const manufacturerInfo = lookupManufacturer(chipNumber); 
+                fetchConceptualLiveRegistrationStatus(chipNumber, manufacturerInfo); 
                 criticalNextStepsDiv.classList.remove('hidden');
-            }, 500); // Short delay to simulate data loading
+            }, 500); 
         }
 
         function lookupManufacturer(chipNumber) {
-            resultsDiv.innerHTML = ''; // Clear loading indicator
+            resultsDiv.innerHTML = ''; 
+            let foundMatch = null; 
 
-            let foundMatch = false;
-
-            // Check for exact prefix matches (longer prefixes first for specificity)
             const sortedPrefixes = microchipData.prefixes.sort((a, b) => b.prefix.length - a.prefix.length);
 
             for (const entry of sortedPrefixes) {
                 if (chipNumber.startsWith(entry.prefix)) {
                     displayManufacturerResult(entry, chipNumber);
-                    foundMatch = true;
-                    break; // Found the most specific match
+                    foundMatch = entry;
+                    break; 
                 }
             }
 
-            // Check shared codes if no specific prefix found yet
             if (!foundMatch) {
                 for (const code in microchipData.shared_codes) {
                     if (chipNumber.startsWith(code)) {
@@ -221,7 +299,7 @@
                             isShared: true
                         };
                         displayManufacturerResult(sharedEntry, chipNumber);
-                        foundMatch = true;
+                        foundMatch = sharedEntry; 
                         break;
                     }
                 }
@@ -234,6 +312,7 @@
                         <p>${microchipData.no_prefix_match_guidance}</p>
                     </div>`;
             }
+            return foundMatch; 
         }
 
         function displayManufacturerResult(entry, chipNumber) {
@@ -245,10 +324,11 @@
                 html += `<p><i class="fas fa-phone mr-2 text-gray-500"></i><strong>Phone:</strong> <a href="tel:${entry.phone}">${entry.phone}</a></p>`;
             }
             if (entry.web && entry.web !== "N/A") {
-                html += `<p><i class="fas fa-globe mr-2 text-gray-500"></i><strong>Web:</strong> <a href="http://${entry.web}" target="_blank">${entry.web}</a></p>`;
+                html += `<p><i class="fas fa-globe mr-2 text-gray-500"></i><strong>Web:</strong> <a href="http://${entry.web.startsWith('www.') ? entry.web : 'www.'+entry.web}" target="_blank">${entry.web}</a></p>`;
             }
             if (entry.notes) {
-                html += `<div class="note">${entry.isTestChip ? '<i class="fas fa-flask mr-1 text-red-600"></i><strong>Warning:</strong> ' : ''}${entry.notes}</div>`;
+                const noteClass = entry.isTestChip ? 'border-red-500 bg-red-100 text-red-700' : 'border-yellow-500 bg-yellow-100 text-yellow-700';
+                html += `<div class="note ${noteClass}">${entry.isTestChip ? '<i class="fas fa-flask mr-1"></i><strong>Warning:</strong> ' : ''}${entry.notes}</div>`;
             }
             if (entry.isTestChip) {
                  card.classList.add('border-4', 'border-red-500');
@@ -257,8 +337,7 @@
             resultsDiv.appendChild(card);
         }
 
-        // --- NEW: Conceptual Live Registration Status ---
-        function fetchConceptualLiveRegistrationStatus(chipNumber) {
+        function fetchConceptualLiveRegistrationStatus(chipNumber, manufacturerInfo) {
             liveResultsContainer.classList.remove('hidden');
             liveResultsContainer.innerHTML = `
                 <div class="result-card live-lookup-section">
@@ -269,104 +348,90 @@
                     </div>
                 </div>`;
 
-            // Simulate an API call delay
             setTimeout(() => {
-                const mockResponses = simulateBackendApiCall(chipNumber);
-                displayConceptualLiveResults(mockResponses);
-            }, 1500); // Longer delay to simulate multiple API calls
+                const mockResponses = simulateBackendApiCall(chipNumber, manufacturerInfo);
+                displayConceptualLiveResults(mockResponses, chipNumber);
+            }, 1500); 
         }
 
-        function simulateBackendApiCall(chipNumber) {
-            // This is where a real backend would query multiple databases.
-            // We'll return mock data.
+        function simulateBackendApiCall(chipNumber, manufacturerInfo) {
             const responses = [];
+            const chipIdEncoded = encodeURIComponent(chipNumber);
 
-            // Mock AAHA Response
-            if (chipNumber.includes("985") || chipNumber.length === 15) { // Example condition
+            // AAHA (Primary)
+            responses.push({
+                database: "AAHA Universal Lookup (PetMicrochipLookup.org)",
+                status: manufacturerInfo ? "Registered (Potentially - Check AAHA)" : "Check AAHA",
+                details: "AAHA searches many registries. Always start your search here.",
+                isPrimary: true,
+                lookupUrl: `http://www.petmicrochiplookup.org` 
+            });
+            
+            // Specific Manufacturer's Registry (if known and has a template)
+            if (manufacturerInfo && manufacturerInfo.registry_search_url_template) {
                 responses.push({
-                    database: "AAHA Universal Lookup (PetMicrochipLookup.org)",
-                    status: "Registered",
-                    details: "PetLink (Datamars)",
-                    registeredOn: "2022-08-15",
-                    contact: "Contact PetLink at 877-738-5465 or visit www.petlink.net",
-                    isPrimary: true
-                });
-            } else {
-                 responses.push({
-                    database: "AAHA Universal Lookup (PetMicrochipLookup.org)",
-                    status: "Not Found / Not Participating",
-                    details: "Chip not found in participating registries or registry does not participate with AAHA.",
-                    isPrimary: true
-                });
-            }
-
-            // Mock PetChip.info Response
-            if (chipNumber.startsWith("9810") || Math.random() > 0.6) { // Example condition
-                 responses.push({
-                    database: "PetChip.info",
-                    status: "Registered",
-                    details: "AVID (US)",
-                    registeredOn: "2021-03-10",
-                    contact: "Contact AVID at 800-336-2843 or visit www.avidid.com"
-                });
-            } else {
-                responses.push({
-                    database: "PetChip.info",
-                    status: "Not Found",
-                    details: "Chip not found in this database."
+                    database: `${manufacturerInfo.company} Registry`,
+                    status: "Check Directly (Recommended)",
+                    details: `This chip may be registered with ${manufacturerInfo.company}. Use their direct lookup.`,
+                    lookupUrl: manufacturerInfo.registry_search_url_template.replace("{chip_id}", chipIdEncoded)
                 });
             }
             
-            // Mock International Database Response
-            if (chipNumber.startsWith("900") && chipNumber.length > 12 && Math.random() > 0.5) {
-                 responses.push({
-                    database: "Conceptual International Registry (e.g., Europetnet)",
-                    status: "Registered",
-                    details: "Registered internationally (e.g., via AKC Reunite).",
-                    registeredOn: "2023-01-20",
-                    contact: "Check Europetnet or PetMaxx for details."
-                });
-            }
+            // Add other key registries
+            const otherRegistries = [
+                { name: "PetChip.info", urlTemplate: `https://www.petchip.info/search-decoded.aspx?microchipnumber={chip_id}`, note: "Good for some non-AAHA participating registries."},
+                { name: "BuddyID", urlTemplate: `https://my.buddyid.com/results.php?key={chip_id}`, note: "Check BuddyID registry."},
+                { name: "FreePetChipRegistry", urlTemplate: `https://www.freepetchipregistry.com/found-pet?chip={chip_id}`, note: "Also check this free registry."}
+            ];
 
-            // Add a generic "not found" if no positive matches, for demonstration
-            if (responses.filter(r => r.status === "Registered").length === 0 && responses.length < 3) {
-                 responses.push({
-                    database: "Other Sample Registry",
-                    status: "Not Found",
-                    details: "This is a placeholder for another registry check."
-                });
-            }
-
-
+            otherRegistries.forEach(reg => {
+                 // Only add if not already covered by a specific manufacturer match that is the same company
+                if (!manufacturerInfo || !manufacturerInfo.company?.toLowerCase().includes(reg.name.split('.')[0].toLowerCase())) {
+                    if (Math.random() > 0.4 || (manufacturerInfo && manufacturerInfo.isShared)) { // Add with some probability or if shared
+                        responses.push({
+                            database: reg.name,
+                            status: "Potentially Registered (Check Directly)",
+                            details: reg.note,
+                            lookupUrl: reg.urlTemplate.replace("{chip_id}", chipIdEncoded)
+                        });
+                    }
+                }
+            });
+            
             return responses;
         }
 
-        function displayConceptualLiveResults(responses) {
-            liveResultsContainer.innerHTML = ''; // Clear loading
+        function displayConceptualLiveResults(responses, chipNumber) {
+            liveResultsContainer.innerHTML = ''; 
 
             const sectionCard = document.createElement('div');
             sectionCard.className = 'result-card live-lookup-section';
             
             let contentHtml = `<h4><i class="fas fa-database mr-2 text-green-600"></i>Conceptual Live Registration Status</h4>`;
-            contentHtml += `<p class="text-sm text-gray-600 mb-3">Below are *simulated* results from querying major pet registration databases. <strong>This is not real data.</strong></p>`;
+            contentHtml += `<p class="text-sm text-gray-600 mb-3">Below are *simulated* results and direct links to query major pet registration databases with chip: <strong>${chipNumber}</strong>. <strong>This is not real data from live queries.</strong></p>`;
 
             if (responses.length === 0) {
                 contentHtml += `<p class="info-message">No conceptual live lookup data to display for this simulation.</p>`;
             } else {
                 responses.forEach(res => {
+                    let bgColor = 'bg-gray-50'; 
+                    if (res.status.includes("Registered (Potentially") || res.status.includes("Check Directly")) bgColor = 'bg-blue-50 border-blue-300';
+                    else if (res.status.includes("Check AAHA")) bgColor = 'bg-yellow-50 border-yellow-300';
+
                     contentHtml += `
-                        <div class="live-lookup-item ${res.status === 'Registered' ? 'bg-green-50 border-green-200' : (res.status.includes('Not Found') ? 'bg-yellow-50 border-yellow-200' : 'bg-gray-50')}">
+                        <div class="live-lookup-item ${bgColor} border rounded-md">
                             <strong>${res.database}:</strong>
-                            <span class="font-semibold ${res.status === 'Registered' ? 'text-green-700' : 'text-orange-600'}">${res.status}</span>
+                            <span class="font-semibold ${res.status.includes('Registered') ? 'text-green-700' : (res.status.includes('Check AAHA') ? 'text-orange-600' : 'text-blue-700')}">${res.status}</span>
                             ${res.details ? `<p class="text-xs text-gray-600 mt-1"><em>Details:</em> ${res.details}</p>` : ''}
-                            ${res.registeredOn ? `<p class="text-xs text-gray-600"><em>Registered On (Simulated):</em> ${res.registeredOn}</p>` : ''}
-                            ${res.contact ? `<p class="text-xs text-gray-600"><em>Next Step (Simulated):</em> ${res.contact}</p>` : ''}
+                            ${res.lookupUrl ? `<p class="text-xs text-gray-600 mt-1"><em>Action:</em> <a href="${res.lookupUrl.replace('{chip_id}', encodeURIComponent(chipNumber))}" target="_blank" class="text-indigo-600 hover:text-indigo-800 font-bold">Search on ${res.database.split('(')[0].trim()} <i class="fas fa-external-link-alt ml-1"></i></a></p>` : ''}
                         </div>`;
                 });
             }
             sectionCard.innerHTML = contentHtml;
             liveResultsContainer.appendChild(sectionCard);
         }
+        
+        updateCriticalNextStepsLinks(null);
 
     </script>
 </body>
