@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Universal Pet Microchip Lookup</title>
     <meta name="description" content="Identify potential manufacturers or issuing companies of a pet's microchip based on its number format.">
-    <link rel="icon" href="favicon.ico">
+    <link rel="icon" href="https://placehold.co/32x32/3b82f6/ffffff?text=🐾">
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Inter font -->
@@ -16,16 +16,24 @@
         html, body {
             font-family: 'Inter', sans-serif;
             transition: background-color 0.3s ease, color 0.3s ease;
+            scroll-behavior: smooth;
         }
-        .fade-in { animation: fadeIn 0.4s ease; }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(16px);}
-            to   { opacity: 1; transform: translateY(0);}
+            from { opacity: 0; transform: translateY(1rem); }
+            to   { opacity: 1; transform: translateY(0); }
         }
         .spin { animation: spin 1s linear infinite; }
         @keyframes spin {
-            0% { transform: rotate(0deg);}
-            100% { transform: rotate(360deg);}
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Style for the sidebar to make it sticky on larger screens */
+        @media (min-width: 1024px) {
+            .sidebar-sticky {
+                position: sticky;
+                top: 2rem; /* Adjust this value as needed */
+            }
         }
     </style>
     <script>
@@ -35,8 +43,8 @@
         }
     </script>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900">
-    <main class="min-h-screen flex flex-col items-center justify-center px-2 py-8 relative">
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <main class="container mx-auto px-4 py-8">
         <!-- Theme Toggle Button -->
         <div class="absolute top-4 right-4">
             <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
@@ -45,114 +53,187 @@
             </button>
         </div>
 
-        <!-- Logo/branding -->
-        <div class="flex flex-col items-center mb-8 text-center">
-            <svg class="w-16 h-16 mb-2 text-blue-700 dark:text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 7.5l.415-.207a.75.75 0 011.085.67V10.5m0 0h6m-6 0a.75.75 0 001.085.67l.415-.207M8.25 10.5V7.5m0 3H4.5m4.5-3H4.5m4.5 3l.415.207a.75.75 0 001.085-.67V7.5m-1.5 6a.75.75 0 00-1.085.67l-.415.207m1.5-6H12m6 3h-1.5m1.5-3h-1.5m-1.5 3l-.415.207a.75.75 0 01-1.085-.67V7.5m1.5 6a.75.75 0 01-1.085.67l-.415.207M12 21a8.25 8.25 0 006.208-3.327l-1.458-1.286A6.75 6.75 0 0112 19.5zM12 21a8.25 8.25 0 01-6.208-3.327l1.458-1.286A6.75 6.75 0 0012 19.5zM12 21v-2.502z" />
-            </svg>
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">Universal Pet Microchip Lookup</h1>
-            <p class="text-gray-600 dark:text-gray-400 mt-2 max-w-xl">Quickly identify potential manufacturers or registries for pet microchips. Designed for veterinary staff, shelters, and concerned pet finders.</p>
-        </div>
+        <!-- Header/Branding -->
+        <header class="text-center mb-10">
+            <div class="flex justify-center items-center gap-3 mb-2">
+                 <svg class="w-12 h-12 text-blue-700 dark:text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 7.5l.415-.207a.75.75 0 011.085.67V10.5m0 0h6m-6 0a.75.75 0 001.085.67l.415-.207M8.25 10.5V7.5m0 3H4.5m4.5-3H4.5m4.5 3l.415.207a.75.75 0 001.085-.67V7.5m-1.5 6a.75.75 0 00-1.085.67l-.415.207m1.5-6H12m6 3h-1.5m1.5-3h-1.5m-1.5 3l-.415.207a.75.75 0 01-1.085-.67V7.5m1.5 6a.75.75 0 01-1.085.67l-.415.207M12 21a8.25 8.25 0 006.208-3.327l-1.458-1.286A6.75 6.75 0 0112 19.5zM12 21a8.25 8.25 0 01-6.208-3.327l1.458-1.286A6.75 6.75 0 0012 19.5zM12 21v-2.502z" />
+                </svg>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">Universal Pet Microchip Lookup</h1>
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl mx-auto">Quickly identify potential manufacturers for a pet's microchip. Designed for vet staff, shelters, and pet finders.</p>
+        </header>
 
-        <!-- Main container -->
-        <section class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-xl w-full p-6 md:p-10 fade-in">
-            <!-- Loading/Error states -->
-            <div id="dataLoadingMessage" class="flex items-center gap-2 text-blue-800 dark:text-blue-300 bg-blue-100 dark:bg-gray-700 border border-blue-300 dark:border-blue-500 rounded px-4 py-3 mb-4 text-base">
-                <i class="fas fa-spinner spin" aria-hidden="true"></i>
-                <span>Loading microchip data...</span>
-            </div>
-            <div id="dataErrorMessage" class="flex items-center gap-2 text-red-800 dark:text-red-300 bg-red-100 dark:bg-gray-700 border border-red-300 dark:border-red-500 rounded px-4 py-3 mb-4 text-base" style="display: none;">
-                <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
-                <span>Error loading microchip data. Please try refreshing the page.</span>
-            </div>
-            <!-- Input Area -->
-            <form id="lookupForm" autocomplete="off" class="flex flex-col gap-4" style="display:none;">
-                <label for="microchipNumber" class="font-semibold text-gray-700 dark:text-gray-300">
-                    Enter Microchip Number <span class="text-gray-400 dark:text-gray-500">(9-15 chars)</span>
-                </label>
-                <div class="relative flex items-center">
-                    <input
-                        type="text"
-                        id="microchipNumber"
-                        class="peer w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 transition font-mono"
-                        placeholder="e.g., 985123456789012"
-                        aria-describedby="inputError"
-                        inputmode="text"
-                        maxlength="20"
-                        required
-                    >
-                    <button id="clearInputButton" type="button" title="Clear input" aria-label="Clear input" class="absolute right-3 text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 bg-transparent border-0 p-1 outline-none" style="display:none;" tabindex="0">
-                        <i class="fas fa-times-circle fa-lg" aria-hidden="true"></i>
-                    </button>
-                </div>
-                <div id="inputError" class="text-sm text-red-600 dark:text-red-400 mt-1" style="display:none;" aria-live="polite"></div>
-                <button id="lookupButton" type="submit" class="w-full py-3 font-semibold text-lg rounded-md bg-blue-700 text-white hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 transition disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-                    <i class="fas fa-search" aria-hidden="true"></i>
-                    Lookup Manufacturer
-                </button>
-            </form>
-            <!-- Loader spinner -->
-            <div id="loader" class="flex items-center justify-center my-4" style="display:none;">
-                <span class="inline-block w-8 h-8 border-4 border-blue-100 dark:border-blue-800 border-t-blue-700 dark:border-t-blue-500 rounded-full spin"></span>
-            </div>
-            <!-- Results -->
-            <section id="resultsArea" class="fade-in mt-8" style="display:none;" aria-live="polite">
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
-                    <div>
-                        <span class="text-gray-500 dark:text-gray-400">Results for</span>
-                        <span id="searchedChipDisplay" class="font-mono text-blue-900 dark:text-blue-300 font-semibold bg-blue-50 dark:bg-gray-700 px-2 py-0.5 rounded"></span>
+        <!-- Main Content Area -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-8 max-w-7xl mx-auto">
+            
+            <!-- Left Column: Search & Results -->
+            <div class="lg:col-span-2">
+                <section class="bg-white dark:bg-gray-800 rounded-xl shadow-lg w-full p-6 md:p-8">
+                    <!-- Loading/Error states -->
+                    <div id="dataLoadingMessage" class="flex items-center gap-2 text-blue-800 dark:text-blue-300 bg-blue-100 dark:bg-gray-700 border border-blue-300 dark:border-blue-500 rounded px-4 py-3 mb-4 text-base">
+                        <i class="fas fa-spinner spin" aria-hidden="true"></i>
+                        <span>Loading microchip data...</span>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button id="copyChipButton" class="hidden px-3 py-2 bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold rounded-md hover:bg-gray-200 dark:hover:bg-gray-500 transition" title="Copy searched chip number">
-                            <i class="fas fa-copy" aria-hidden="true"></i> Copy
+                    <div id="dataErrorMessage" class="flex items-center gap-2 text-red-800 dark:text-red-300 bg-red-100 dark:bg-gray-700 border border-red-300 dark:border-red-500 rounded px-4 py-3 mb-4 text-base" style="display: none;">
+                        <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+                        <span>Error loading microchip data. Please try refreshing the page.</span>
+                    </div>
+
+                    <!-- Input Area -->
+                    <form id="lookupForm" autocomplete="off" class="flex flex-col gap-4" style="display:none;">
+                        <label for="microchipNumber" class="font-semibold text-gray-700 dark:text-gray-300">
+                            Enter Microchip Number <span class="text-gray-400 dark:text-gray-500">(9-15 chars)</span>
+                        </label>
+                        <div class="relative flex items-center">
+                            <input
+                                type="text"
+                                id="microchipNumber"
+                                class="peer w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 transition font-mono"
+                                placeholder="e.g., 985123456789012"
+                                aria-describedby="inputError"
+                                inputmode="text"
+                                maxlength="20"
+                                required
+                            >
+                            <button id="clearInputButton" type="button" title="Clear input" aria-label="Clear input" class="absolute right-3 text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 bg-transparent border-0 p-1 outline-none" style="display:none;" tabindex="0">
+                                <i class="fas fa-times-circle fa-lg" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div id="inputError" class="text-sm text-red-600 dark:text-red-400 mt-1" style="display:none;" aria-live="polite"></div>
+                        <button id="lookupButton" type="submit" class="w-full py-3 font-semibold text-lg rounded-md bg-blue-700 text-white hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 transition disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                            Lookup Manufacturer
                         </button>
-                        <span id="copyFeedback" class="text-green-700 dark:text-green-400 text-sm"></span>
-                    </div>
-                </div>
-                <div id="testChipWarning" class="flex items-center gap-2 text-yellow-800 dark:text-yellow-300 bg-yellow-100 dark:bg-yellow-900/30 border border-yellow-300 dark:border-yellow-600 rounded-lg px-4 py-3 mb-4 text-base" style="display:none;">
-                    <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
-                    <span></span>
-                </div>
-                <!-- Direct Lookup Links -->
-                <section id="directLookupLinksArea" class="mb-6" style="display:none;">
-                    <h2 class="text-lg font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2 mb-2">
-                        <i class="fas fa-external-link-alt text-gray-500 dark:text-gray-400" aria-hidden="true"></i>
-                        Direct Registry Lookups
-                    </h2>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">Use these services to search for owner registration. This tool only identifies the possible manufacturer.</p>
-                    <ul id="directLookupList" class="flex flex-col gap-2"></ul>
+                    </form>
+                    
+                    <!-- Results Area -->
+                    <section id="resultsArea" class="fade-in mt-6" style="display:none;" aria-live="polite">
+                        <!-- Loader spinner for search -->
+                        <div id="loader" class="flex items-center justify-center my-4" style="display:none;">
+                            <span class="inline-block w-8 h-8 border-4 border-blue-100 dark:border-blue-800 border-t-blue-700 dark:border-t-blue-500 rounded-full spin"></span>
+                        </div>
+                        
+                        <!-- Header for results -->
+                        <div id="resultsHeader" style="display:none;" class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
+                            <div>
+                                <span class="text-gray-500 dark:text-gray-400">Results for</span>
+                                <span id="searchedChipDisplay" class="font-mono text-blue-900 dark:text-blue-300 font-semibold bg-blue-50 dark:bg-gray-700 px-2 py-0.5 rounded"></span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button id="copyChipButton" class="hidden px-3 py-2 bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 text-sm font-semibold rounded-md hover:bg-gray-200 dark:hover:bg-gray-500 transition" title="Copy searched chip number">
+                                    <i class="fas fa-copy" aria-hidden="true"></i> Copy
+                                </button>
+                                <span id="copyFeedback" class="text-green-700 dark:text-green-400 text-sm"></span>
+                            </div>
+                        </div>
+
+                        <div id="testChipWarning" class="flex items-center gap-2 text-yellow-800 dark:text-yellow-300 bg-yellow-100 dark:bg-yellow-900/30 border border-yellow-300 dark:border-yellow-600 rounded-lg px-4 py-3 mb-4 text-base" style="display:none;">
+                            <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+                            <span></span>
+                        </div>
+                        
+                        <!-- Manufacturer Info -->
+                        <div id="chipInfoOutput"></div>
+                        
+                        <!-- Not Found Message -->
+                        <div id="notFoundMessage" class="bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-700 p-4 rounded-lg mt-4" style="display:none;">
+                            <p class="font-bold text-lg mb-2 text-gray-900 dark:text-gray-100">No Manufacturer Match Found</p>
+                            <p class="mb-3 text-gray-700 dark:text-gray-300">Our database does not have a matching prefix for this chip. This does not mean the chip is invalid or unregistered.</p>
+                            <div id="countryCodeSuggestion" class="bg-amber-100 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700 text-amber-800 dark:text-amber-300 px-3 py-2 rounded-md mb-3 text-sm" style="display:none;">
+                                <i class="fas fa-globe-americas mr-1" aria-hidden="true"></i>
+                                <span>This number format doesn't match a common US/North American prefix. It may be an international chip.</span>
+                            </div>
+                            <strong class="block mb-2 text-gray-800 dark:text-gray-200">Next Steps:</strong>
+                             <ul class="list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-300">
+                                <li>Your next steps should be to use the <strong>Direct Registry Lookups</strong> on the right and, if needed, the resources in the <strong>Advanced Help</strong> section below.</li>
+                                <li>Try the <a href="https://www.petmicrochiplookup.org" target="_blank" rel="noopener noreferrer" class="underline text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">AAHA Universal Pet Microchip Lookup</a>, a comprehensive tool.</li>
+                                <li>Check <a href="http://www.petchip.info" target="_blank" rel="noopener noreferrer" class="underline text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">PetChip.info</a> for registries that do not participate in the AAHA lookup.</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- Advanced Help Section -->
+                    <section id="advancedHelpSection" class="mt-8 fade-in" style="display: none;">
+                        <div class="bg-teal-50 dark:bg-teal-900/30 border-l-4 border-teal-500 text-teal-800 dark:text-teal-200 p-4 rounded-r-lg">
+                            <div class="flex">
+                                <div class="py-1"><i class="fas fa-hands-helping fa-2x text-teal-500 dark:text-teal-400 mr-4"></i></div>
+                                <div>
+                                    <h3 class="font-bold text-gray-900 dark:text-white">Advanced Help: Dead-End or Unregistered Chips</h3>
+                                    <p class="text-sm mt-1 text-gray-700 dark:text-gray-300">
+                                        If you can't find the owner through lookups, the chip may be unregistered or the contact information may be outdated (a "dead-end chip"). Here are your next steps:
+                                    </p>
+                                    
+                                    <div class="mt-4">
+                                        <h4 class="font-semibold text-gray-800 dark:text-gray-200">1. Get Help from Volunteer Tracers</h4>
+                                        <p class="text-sm mt-1 text-gray-700 dark:text-gray-300">
+                                            <a href="https://www.microchiphelp.com/" target="_blank" rel="noopener noreferrer" class="font-bold underline hover:text-teal-600 dark:hover:text-teal-300">The Microchip Hunters</a> are volunteer experts at tracing difficult chips. Submit a request for assistance using the appropriate form below:
+                                        </p>
+                                        <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-2 mt-3">
+                                             <a href="https://form.jotform.com/90818285559976" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 bg-gray-50 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 border border-gray-200 dark:border-gray-600 hover:border-blue-200 dark:hover:border-blue-700 rounded-md px-3 py-2 transition w-full text-sm">
+                                                <i class="fas fa-user text-gray-500 dark:text-gray-400 w-4 text-center" aria-hidden="true"></i>
+                                                <span class="flex-1 font-medium text-gray-800 dark:text-gray-200">Public Form</span>
+                                            </a>
+                                             <a href="https://form.jotform.com/90818736755975" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 bg-gray-50 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 border border-gray-200 dark:border-gray-600 hover:border-blue-200 dark:hover:border-blue-700 rounded-md px-3 py-2 transition w-full text-sm">
+                                                <i class="fas fa-shield-alt text-gray-500 dark:text-gray-400 w-4 text-center" aria-hidden="true"></i>
+                                                <span class="flex-1 font-medium text-gray-800 dark:text-gray-200">Shelter Form</span>
+                                            </a>
+                                            <a href="https://form.jotform.com/90818680043963" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 bg-gray-50 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 border border-gray-200 dark:border-gray-600 hover:border-blue-200 dark:hover:border-blue-700 rounded-md px-3 py-2 transition w-full text-sm">
+                                                <i class="fas fa-clinic-medical text-gray-500 dark:text-gray-400 w-4 text-center" aria-hidden="true"></i>
+                                                <span class="flex-1 font-medium text-gray-800 dark:text-gray-200">Vet/Police Form</span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <h4 class="font-semibold text-gray-800 dark:text-gray-200">2. File a National Found Pet Report</h4>
+                                         <p class="text-sm mt-1 text-gray-700 dark:text-gray-300">
+                                            Filing a public found pet report creates a searchable record that owners can find.
+                                        </p>
+                                        <div class="mt-3">
+                                            <a href="https://search.petfbi.org/report.html" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 bg-gray-50 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 border border-gray-200 dark:border-gray-600 hover:border-blue-200 dark:hover:border-blue-700 rounded-md px-3 py-2 transition w-full text-sm max-w-xs">
+                                                <i class="fas fa-bullhorn text-gray-500 dark:text-gray-400 w-4 text-center" aria-hidden="true"></i>
+                                                <span class="flex-1 font-medium text-gray-800 dark:text-gray-200">Report to Pet FBI</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </section>
-                <!-- Manufacturer Info -->
-                <div id="chipInfoOutput"></div>
-                <!-- Not Found -->
-                <div id="notFoundMessage" class="bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-700 p-4 rounded-lg mt-6" style="display:none;">
-                    <p class="font-bold text-lg mb-2 text-gray-900 dark:text-gray-100">No Manufacturer Match Found</p>
-                    <p class="mb-3 text-gray-700 dark:text-gray-300">Our database does not have a matching prefix for this chip. This does not mean the chip is invalid or unregistered.</p>
-                    <div id="countryCodeSuggestion" class="bg-amber-100 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700 text-amber-800 dark:text-amber-300 px-3 py-2 rounded-md mb-3 text-sm" style="display:none;">
-                        <i class="fas fa-globe-americas mr-1" aria-hidden="true"></i>
-                        <span>This number format doesn't match a common US/North American prefix. It may be an international chip.</span>
-                    </div>
-                    <strong class="block mb-2 text-gray-800 dark:text-gray-200">Next Steps:</strong>
-                    <ul class="list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-300">
-                        <li>The most important step is to use the <strong>Direct Registry Lookups</strong> listed above to check major databases.</li>
-                        <li>You can also try the <a href="https://www.petmicrochiplookup.org" target="_blank" rel="noopener noreferrer" class="underline text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">AAHA Universal Pet Microchip Lookup</a>, a comprehensive tool.</li>
-                        <li>Check <a href="http://www.petchip.info" target="_blank" rel="noopener noreferrer" class="underline text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">PetChip.info</a> for registries that do not participate in the AAHA lookup.</li>
-                    </ul>
-                </div>
-            </section>
-            <!-- Info box -->
-            <aside class="bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-800 rounded-lg p-4 mt-8 text-indigo-900 dark:text-indigo-200 text-sm">
-                <strong>Important:</strong> This tool provides potential manufacturer information based on prefixes only. For actual pet registration details and to find an owner, you <b>must</b> check official registries.
-                <div class="mt-1">
-                    Data based on "MICROCHIP FORMAT GUIDE" by <a href="http://www.microchiphelp.com" target="_blank" rel="noopener noreferrer" class="underline text-indigo-700 dark:text-indigo-300">MicrochipHelp.com</a> / Lost Dogs of America.
+            </div>
+
+            <!-- Right Column: Sidebar -->
+            <aside id="sidebar" class="lg:col-span-1 mt-8 lg:mt-0 fade-in" style="display: none;">
+                <div class="sidebar-sticky space-y-6">
+                    <!-- Direct Lookup Links -->
+                    <section id="directLookupLinksArea" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                        <h2 class="text-lg font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2 mb-2">
+                            <i class="fas fa-external-link-alt text-gray-500 dark:text-gray-400" aria-hidden="true"></i>
+                            Direct Registry Lookups
+                        </h2>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Use these services to search for owner registration. This tool only identifies the possible manufacturer.</p>
+                        <ul id="directLookupList" class="flex flex-col gap-2"></ul>
+                    </section>
+                    
+                    <!-- Important Info Box -->
+                    <section class="bg-indigo-50 dark:bg-indigo-900/40 border border-indigo-200 dark:border-indigo-800 rounded-lg p-4 text-indigo-900 dark:text-indigo-200 text-sm">
+                        <strong>Important:</strong> This tool provides potential manufacturer information based on prefixes only. For actual pet registration details and to find an owner, you <b>must</b> check official registries.
+                        <div class="mt-1">
+                            Data based on "MICROCHIP FORMAT GUIDE" by <a href="http://www.microchiphelp.com" target="_blank" rel="noopener noreferrer" class="underline text-indigo-700 dark:text-indigo-300">MicrochipHelp.com</a> / Lost Dogs of America.
+                        </div>
+                    </section>
                 </div>
             </aside>
-        </section>
+        </div>
+
         <!-- Footer -->
-        <footer class="mt-8 text-gray-500 dark:text-gray-400 text-xs text-center">
+        <footer class="mt-12 text-gray-500 dark:text-gray-400 text-xs text-center">
             &copy; 2025 Universal Pet Microchip Lookup Tool. Not affiliated with any registry or manufacturer.
         </footer>
     </main>
+
     <!-- Script -->
     <script>
     // --- Theme Toggle ---
@@ -204,6 +285,7 @@
     const copyChipButton = document.getElementById('copyChipButton');
     const copyFeedbackSpan = document.getElementById('copyFeedback');
     const resultsArea = document.getElementById('resultsArea');
+    const resultsHeader = document.getElementById('resultsHeader');
     const chipInfoOutputDiv = document.getElementById('chipInfoOutput');
     const notFoundMessageDiv = document.getElementById('notFoundMessage');
     const countryCodeSuggestionDiv = document.getElementById('countryCodeSuggestion');
@@ -211,8 +293,9 @@
     const loader = document.getElementById('loader');
     const searchedChipDisplay = document.getElementById('searchedChipDisplay');
     const testChipWarningDiv = document.getElementById('testChipWarning');
-    const directLookupLinksArea = document.getElementById('directLookupLinksArea');
+    const sidebar = document.getElementById('sidebar');
     const directLookupListUl = document.getElementById('directLookupList');
+    const advancedHelpSection = document.getElementById('advancedHelpSection');
 
     // Direct Lookup Services
     const directLookupServices = [
@@ -220,11 +303,13 @@
         { name: "AAHA Universal Lookup (Owner)", urlTemplate: "https://www.aaha.org/petmicrochiplookup?microchip_id={chip_id}", icon: "fas fa-paw" },
         { name: "PetLink", urlTemplate: "https://www.petlink.net/microchip-search/?microchip-number={chip_id}", icon: "fas fa-link" },
         { name: "HomeAgain", urlTemplate: "https://www.homeagain.com/chip-lookup/{chip_id}", icon: "fas fa-home" },
+        { name: "Fi Nano Lookup", urlTemplate: "https://nano.tryfi.com/?s={chip_id}", icon: "fas fa-dog" },
         { name: "MyPetHealth", urlTemplate: "https://www.mypethealth.com/auth/report/pet?query={chip_id}", icon: "fas fa-file-medical" },
         { name: "Peeva Lookup", urlTemplate: "https://peeva.co/microchip-lookup/?chipNumber={chip_id}", icon: "fas fa-search-location" },
         { name: "Petkey", urlTemplate: "http://petkey.org//microchip/lookup/{chip_id}", icon: "fas fa-key" },
         { name: "BuddyID", urlTemplate: "https://my.buddyid.com/results.php?key={chip_id}", icon: "fas fa-user-friends" },
-        { name: "IDTag Lookup", urlTemplate: "https://idtag.com/pet/{chip_id}", icon: "fas fa-id-badge" },
+        { name: "IDTag Pet Search", urlTemplate: "https://idtag.com/pet-search/?chip={chip_id}", icon: "fas fa-id-badge" },
+        { name: "IDTag Lookup", urlTemplate: "https://idtag.com/pet/{chip_id}", icon: "fas fa-id-card" },
         { name: "NanoChipID", urlTemplate: "https://www.nanochipid.com/lookup/{chip_id}", icon: "fas fa-microchip" },
         { name: "Petstablished", urlTemplate: "https://petstablished.com/microchip_lookup/{chip_id}", icon: "fas fa-shield-alt" },
         { name: "FreePetChipRegistry", urlTemplate: "https://www.freepetchipregistry.com/found-pet?chip={chip_id}", icon: "fas fa-database" }
@@ -235,26 +320,26 @@
         const embeddedMicrochipData = [
             {"prefix":"900","entries":[{"brand":"ACA MARRS","contacts":[{"type":"phone","value":"800-992-0571"}],"notes":["Prefix for chips not otherwise listed. No info if unenrolled."]}]},
             {"prefix":"900032","entries":[{"brand":"UNKNOWN","notes":["Mystery chip. Can try Get Me Known (getmeknown.co.za)."]}]},
-            {"prefix":"900074","entries":[{"brand":"SMART TAG (ID Tag)","contacts":[{"type":"phone","value":"201-537-5644"}],"notes":["Info if unenrolled."]}]},
-            {"prefix":"900085","entries":[{"brand":"PETSTABLISHED","contacts":[{"type":"phone","value":"855-684-3184 ext 3"}]},{"brand":"HOMEWARDBOUND","contacts":[{"type":"phone","value":"844-643-4663"}]},{"brand":"ONLINE AMAZON","manufacturerWebsite":"REXID-PET.COM"}]},
+            {"prefix":"900074","entries":[{"brand":"SMART TAG (ID Tag)","contacts":[{"type":"phone","value":"201-537-5644"},{"type":"phone","text":"24/7 Hotline","value":"888-521-0808"},{"type":"phone","text":"Support","value":"866-603-6863"},{"type":"email","value":"support@idtag.com"}],"notes":["Info if unenrolled."]}]},
+            {"prefix":"900085","entries":[{"brand":"PETSTABLISHED","contacts":[{"type":"phone","value":"855-684-3184 ext 3"},{"type":"email","value":"support@petstablished.com"}]},{"brand":"HOMEWARDBOUND","contacts":[{"type":"phone","value":"844-643-4663"}]},{"brand":"ONLINE AMAZON","manufacturerWebsite":"REXID-PET.COM"}]},
             {"prefix":"900108","entries":[{"brand":"ViaGuard","contacts":[{"type":"phone","value":"877-842-4827"}],"notes":["No info if unenrolled."]}]},
             {"prefix":"900111","entries":[{"brand":"INTERNATIONAL PET REGISTRY (IPR)","contacts":[{"type":"phone","value":"844-477-7387"}],"notes":["Info if unenrolled, but manufacturer may sell direct to consumer."]}]},
             {"prefix":"900113","_aliasFor":"900111"},
             {"prefix":"900115","_aliasFor":"900111"},
             {"prefix":"900118","_aliasFor":"900111"},
-            {"prefix":"900139","entries":[{"brand":"SMART TAG (ID Tag)","contacts":[{"type":"phone","value":"201-537-5644"}],"notes":["Info if unenrolled."]}]},
+            {"prefix":"900139","entries":[{"brand":"SMART TAG (ID Tag)","contacts":[{"type":"phone","value":"201-537-5644"},{"type":"phone","text":"24/7 Hotline","value":"888-521-0808"},{"type":"phone","text":"Support","value":"866-603-6863"},{"type":"email","value":"support@idtag.com"}],"notes":["Info if unenrolled."]}]},
             {"prefix":"900164","entries":[{"brand":"SAVE THIS LIFE / Multiple Vendors","contacts":[{"type":"phone","value":"855-777-2447"}]}]},
             {"prefix":"900215","entries":[{"brand":"isenvo.com","manufacturerWebsite":"https://isenvo.com","notes":["Sold direct to consumer from Amazon."]}]},
             {"prefix":"900223","entries":[{"brand":"Get Me Known","manufacturerWebsite":"https://www.getmeknown.co.za/"},{"brand":"Five Star ID","manufacturerWebsite":"https://www.fivestarid.co.za/"}]},
-            {"prefix":"900235","entries":[{"brand":"FiNano","manufacturerWebsite":"https://nano.tryfi.com/"}]},
+            {"prefix":"900235","entries":[{"brand":"FiNano","manufacturerWebsite":"https://nano.tryfi.com/","contacts":[{"type":"phone","value":"1-888-434-3647","text":"1-888-4-Fi-DOGS"}]}]},
             {"prefix":"900250","entries":[{"brand":"FURREKA","contacts":[{"type":"phone","value":"844-387-7352"}]}]},
             {"prefix":"901017","entries":[{"brand":"UI Devices","contacts":[{"type":"phone","value":"224-444-8484"}]}]},
-            {"prefix":"911","entries":[{"brand":"911PETCHIP / FREE PET CHIP REGISTRY","contacts":[{"type":"phone","value":"888-546-7615"}],"notes":["Info if unenrolled."]}]},
+            {"prefix":"911","entries":[{"brand":"911PETCHIP / FREE PET CHIP REGISTRY","contacts":[{"type":"phone","text":"Lost Pet Recovery","value":"888-546-7615"},{"type":"phone","text":"Sales","value":"818-445-3022"},{"type":"email","value":"admin@911petchip.com"}],"notes":["Info if unenrolled."]}]},
             {"prefix":"927","entries":[{"brand":"Flucky (Humanada S.A. de C.V.)","contacts":[{"type":"phone","value":"+52 614 142 6826"},{"type":"email","value":"info@flucky.com.mx"}],"notes":["MEXICO"]}]},
             {"prefix":"932","entries":[{"brand":"LAMBERT VET SUPPLY (ADEQID)","notes":["No registry kept."]}]},
             {"prefix":"933","entries":[{"brand":"BUDDY ID (Microchip ID Systems)","contacts":[{"type":"phone","value":"800-434-2843"}],"notes":["Info if unenrolled. 933007125056789 is a test chip."]},{"brand":"Get Me Known","manufacturerWebsite":"https://www.getmeknown.co.za/"}]},
             {"prefix":"939","entries":[{"brand":"MICROCHIP 4 SOLUTIONS","contacts":[{"type":"phone","value":"877-738-4384"}]},{"brand":"Electrinet (MEXICO)","notes":["sells to FCM.mx"]}]},
-            {"prefix":"941","entries":[{"brand":"PETKEY","contacts":[{"type":"phone","value":"866-699-3463"}]},{"brand":"24PETWATCH","contacts":[{"type":"phone","value":"866-597-2424"}]}]},
+            {"prefix":"941","entries":[{"brand":"PETKEY","contacts":[{"type":"phone","value":"866-699-3463"},{"type":"phone","text":"Lost Pet Support","value":"734-600-3463"}]},{"brand":"24PETWATCH","contacts":[{"type":"phone","text":"Membership/Lost Pet","value":"1-833-886-8002"},{"type":"phone","text":"Insurance","value":"1-877-821-2424"},{"type":"email","text":"Media Inquiry","value":"marketing@pethealthinc.com"}]}]},
             {"prefix":"944","entries":[{"brand":"Micro-ID (UK)","manufacturerWebsite":"http://www.iso-944.com/"}]},
             {"prefix":"952","entries":[{"brand":"MICROCHIP 4 SOLUTIONS","contacts":[{"type":"phone","value":"877-738-4384"}]}]},
             {"prefix":"953","entries":[{"brand":"Virbac BackHome","manufacturerWebsite":"https://findmychip.co.za/"}]},
@@ -266,25 +351,25 @@
             {"prefix":"977","entries":[{"brand":"AVID","contacts":[{"type":"phone","value":"800-336-2843"}]}]},
             {"prefix":"978","entries":[{"brand":"Virbac BackHome","manufacturerWebsite":"https://findmychip.co.za/"}]},
             {"prefix":"981010","entries":[{"brand":"Banfield","contacts":[{"type":"phone","value":"800-838-6738"}]}]},
-            {"prefix":"98102","entries":[{"brand":"PETLINK (Datamars)","contacts":[{"type":"phone","value":"877-738-5465"}]},{"brand":"24PETWATCH","contacts":[{"type":"phone","value":"866-597-2424"}]}]},
+            {"prefix":"98102","entries":[{"brand":"PETLINK (Datamars)","contacts":[{"type":"phone","value":"877-738-5465","text":"1-877-PETLINK"}]},{"brand":"24PETWATCH","contacts":[{"type":"phone","text":"Membership/Lost Pet","value":"1-833-886-8002"},{"type":"phone","text":"Insurance","value":"1-877-821-2424"},{"type":"email","text":"Media Inquiry","value":"marketing@pethealthinc.com"}]}]},
             {"prefix":"98103","_aliasFor":"98102"},
             {"prefix":"981100","entries":[{"brand":"Datamars or 'Dog ID'","notes":["Check europetnet.org and Petmaxx."]}]},
-            {"prefix":"982","entries":[{"brand":"24PETWATCH","contacts":[{"type":"phone","value":"866-597-2424"}]}]},
+            {"prefix":"982","entries":[{"brand":"24PETWATCH","contacts":[{"type":"phone","text":"Membership/Lost Pet","value":"1-833-886-8002"},{"type":"phone","text":"Insurance","value":"1-877-821-2424"},{"type":"email","text":"Media Inquiry","value":"marketing@pethealthinc.com"}]}]},
             {"prefix":"985","entries":[{"brand":"HOME AGAIN","contacts":[{"type":"phone","value":"888-466-3242"}],"notes":["985170... and 985191... are often test chips."]}]},
-            {"prefix":"987","entries":[{"brand":"SMART TAG (ID Tag)","contacts":[{"type":"phone","value":"201-537-5644"}],"notes":["Info if unenrolled."]}]},
-            {"prefix":"990","entries":[{"brand":"NANOCHIPID.com","manufacturerWebsite":"https://www.nanochipid.com/","notes":["Info if unenrolled."]},{"brand":"VIAGUARD","contacts":[{"type":"phone","value":"877-842-4827"}],"notes":["No info if unenrolled."]}]},
-            {"prefix":"991","entries":[{"brand":"SAVE THIS LIFE","contacts":[{"type":"phone","value":"855-777-2447"}]},{"brand":"911PETCHIP / FREE PET CHIP REGISTRY","contacts":[{"type":"phone","value":"888-546-7615"}]},{"brand":"PEEVA","contacts":[{"type":"phone","value":"833-733-8226"}],"notes":["No info if unenrolled."]}]},
-            {"prefix":"992","entries":[{"brand":"ACA MARRS","contacts":[{"type":"phone","value":"800-992-0571"}],"notes":["No info if unenrolled."]},{"brand":"INTERNATIONAL PET REGISTRY","contacts":[{"type":"phone","value":"844-477-7387"}]},{"brand":"NANOCHIPID.com","manufacturerWebsite":"https://www.nanochipid.com/"},{"brand":"PETKEY","contacts":[{"type":"phone","value":"866-699-3463"}]},{"brand":"SMART TRAC","manufacturerWebsite":"PETMAXX.COM"},{"brand":"24 PETWATCH","contacts":[{"type":"phone","value":"866-597-2424"}]}]},
+            {"prefix":"987","entries":[{"brand":"SMART TAG (ID Tag)","contacts":[{"type":"phone","value":"201-537-5644"},{"type":"phone","text":"24/7 Hotline","value":"888-521-0808"},{"type":"phone","text":"Support","value":"866-603-6863"},{"type":"email","value":"support@idtag.com"}],"notes":["Info if unenrolled."]}]},
+            {"prefix":"990","entries":[{"brand":"NANOCHIPID.com","manufacturerWebsite":"https://www.nanochipid.com/","contacts":[{"type":"phone","value":"855-434-2447"}],"notes":["Info if unenrolled."]},{"brand":"VIAGUARD","contacts":[{"type":"phone","value":"877-842-4827"}],"notes":["No info if unenrolled."]}]},
+            {"prefix":"991","entries":[{"brand":"SAVE THIS LIFE","contacts":[{"type":"phone","value":"855-777-2447"}]},{"brand":"911PETCHIP / FREE PET CHIP REGISTRY","contacts":[{"type":"phone","text":"Lost Pet Recovery","value":"888-546-7615"}]},{"brand":"PEEVA","contacts":[{"type":"phone","value":"833-733-8226"}],"notes":["No info if unenrolled."]}]},
+            {"prefix":"992","entries":[{"brand":"ACA MARRS","contacts":[{"type":"phone","value":"800-992-0571"}],"notes":["No info if unenrolled."]},{"brand":"INTERNATIONAL PET REGISTRY","contacts":[{"type":"phone","value":"844-477-7387"}]},{"brand":"NANOCHIPID.com","manufacturerWebsite":"https://www.nanochipid.com/","contacts":[{"type":"phone","value":"855-434-2447"}]},{"brand":"PETKEY","contacts":[{"type":"phone","value":"866-699-3463"},{"type":"phone","text":"Lost Pet Support","value":"734-600-3463"}]},{"brand":"SMART TRAC","manufacturerWebsite":"PETMAXX.COM"},{"brand":"24 PETWATCH","contacts":[{"type":"phone","text":"Membership/Lost Pet","value":"1-833-886-8002"}]}]},
             {"prefix":"999","entries":[{"brand":"Test Chips","notes":["Should not have been released. Report to andie@icar.org."]}]},
             {"prefix":"AVID9DIGIT","_isVirtual":true,"entries":[{"brand":"AVID (9-Digit)","manufacturerWebsite":"https://www.avidid.com/","contacts":[{"type":"phone","value":"800-336-2843"}],"chipTechnology":["125 kHz"]}]},
             {"prefix":"000","entries":[{"brand":"AKC Reunite","contacts":[{"type":"phone","value":"800-252-7894"}]}]},
             {"prefix":"0A0","entries":[{"brand":"Buddy ID","contacts":[{"type":"phone","value":"800-434-2843"}]}]},
-            {"prefix":"0A1","entries":[{"brand":"24PETWATCH","contacts":[{"type":"phone","value":"866-597-2424"}]}]},
+            {"prefix":"0A1","entries":[{"brand":"24PETWATCH","contacts":[{"type":"phone","text":"Membership/Lost Pet","value":"1-833-886-8002"},{"type":"phone","text":"Insurance","value":"1-877-821-2424"},{"type":"email","text":"Media Inquiry","value":"marketing@pethealthinc.com"}]}]},
             {"prefix":"0D0D","entries":[{"brand":"BANFIELD (HOME AGAIN)","contacts":[{"type":"phone","value":"877-567-8738"}]}]},
             {"prefix":"1","entries":[{"brand":"AVID","contacts":[{"type":"phone","value":"800-336-2843"}]}]},
             {"prefix":"4","entries":[{"brand":"HOMEAGAIN","contacts":[{"type":"phone","value":"888-466-3242"}]}]},
             {"prefix":"7E1","entries":[{"brand":"BUDDY ID (Microchip ID Systems)","contacts":[{"type":"phone","value":"800-434-2843"}],"notes":["Info if unenrolled."]}]},
-            {"prefix":"9A1","entries":[{"brand":"24PETWATCH","contacts":[{"type":"phone","value":"866-597-2424"}]}]},
+            {"prefix":"9A1","entries":[{"brand":"24PETWATCH","contacts":[{"type":"phone","text":"Membership/Lost Pet","value":"1-833-886-8002"},{"type":"phone","text":"Insurance","value":"1-877-821-2424"},{"type":"email","text":"Media Inquiry","value":"marketing@pethealthinc.com"}]}]},
             {"prefix":"TR","entries":[{"brand":"AKC Reunite (formerly Trovan)","contacts":[{"type":"phone","value":"800-252-7894"}]}]}
         ];
         
@@ -327,7 +412,8 @@
         clearInputButton.style.display = 'none';
         inputErrorDiv.style.display = 'none';
         resultsArea.style.display = 'none';
-        directLookupLinksArea.style.display = 'none';
+        sidebar.style.display = 'none';
+        advancedHelpSection.style.display = 'none';
         microchipInput.focus();
     });
 
@@ -363,12 +449,11 @@
             li.innerHTML = `
                 <a href="${url}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 bg-gray-50 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 border border-gray-200 dark:border-gray-600 hover:border-blue-200 dark:hover:border-blue-700 rounded-md px-3 py-2 transition w-full">
                     <i class="${service.icon || 'fas fa-search'} text-gray-500 dark:text-gray-400 w-5 text-center" aria-hidden="true"></i> 
-                    <span class="flex-1 text-gray-800 dark:text-gray-200 font-medium">${service.name}</span>
-                    <i class="fas fa-external-link-alt text-gray-400 dark:text-gray-500" aria-hidden="true"></i>
+                    <span class="flex-1 text-gray-800 dark:text-gray-200 font-medium text-sm">${service.name}</span>
+                    <i class="fas fa-external-link-alt text-gray-400 dark:text-gray-500 fa-xs" aria-hidden="true"></i>
                 </a>`;
             directLookupListUl.appendChild(li);
         });
-        directLookupLinksArea.style.display = 'block';
     }
     
     // --- Card Creation Helpers ---
@@ -395,16 +480,18 @@
         const rawChipNumber = microchipInput.value.trim();
         // Reset UI states
         inputErrorDiv.style.display = 'none';
-        resultsArea.style.display = 'none';
         chipInfoOutputDiv.innerHTML = '';
         notFoundMessageDiv.style.display = 'none';
         countryCodeSuggestionDiv.style.display = 'none';
         testChipWarningDiv.style.display = 'none';
         copyChipButton.classList.add('hidden');
+        resultsHeader.style.display = 'none';
         copyFeedbackSpan.textContent = '';
-        directLookupLinksArea.style.display = 'none';
-        directLookupListUl.innerHTML = '';
+        advancedHelpSection.style.display = 'none';
+        
+        resultsArea.style.display = 'block';
         loader.style.display = 'flex';
+        sidebar.style.display = 'none'; // Hide sidebar until search completes
 
         const chipNumber = rawChipNumber.replace(/[\s-*]+/g, '').toUpperCase();
         if (!/^[A-Z0-9]{9,15}$/.test(chipNumber)) {
@@ -417,9 +504,11 @@
             return;
         }
 
-        populateDirectLookupLinks(chipNumber);
-
         setTimeout(() => { 
+            populateDirectLookupLinks(chipNumber); 
+            sidebar.style.display = 'block'; 
+            advancedHelpSection.style.display = 'block'; 
+
             let matches = [];
             if (chipNumber === "933007125056789") { testChipWarningDiv.style.display = 'flex'; testChipWarningDiv.querySelector('span').textContent = "This is a known test chip (Buddy ID)."; }
             if (chipNumber.startsWith("985170") || chipNumber.startsWith("985191")) { testChipWarningDiv.style.display = 'flex'; testChipWarningDiv.querySelector('span').textContent = `Chips starting with ${chipNumber.substring(0,6)} may be Home Again test chips.`; }
@@ -442,12 +531,13 @@
             }
 
             loader.style.display = 'none';
-            resultsArea.style.display = 'block';
+            resultsHeader.style.display = 'flex';
             searchedChipDisplay.textContent = rawChipNumber;
             copyChipButton.classList.remove('hidden');
 
             if (matches.length > 0) {
                 chipInfoOutputDiv.style.display = 'block';
+                notFoundMessageDiv.style.display = 'none';
                 matches.forEach(match => {
                     const currentMatchData = aliasMap.get(match.prefix) || match;
                     currentMatchData.entries.forEach(entry => {
@@ -465,7 +555,7 @@
                             const link = contact.type === 'phone' ? `tel:${contact.value.replace(/[^0-9+]/g, '')}` : (contact.type === 'email' ? `mailto:${contact.value}`: (contact.value.startsWith('http') ? contact.value : `http://${contact.value}`));
                             const displayValue = contact.text || contact.value;
                             const line = `<a href="${link}" target="_blank" rel="noopener noreferrer" class="underline hover:text-blue-500">${displayValue}</a>`;
-                            return `<div class="flex items-center gap-3 text-sm"><span class="text-gray-500 dark:text-gray-400">${icon}</span><span class="text-gray-800 dark:text-gray-200">${line}</span></div>`;
+                            return `<div class="flex items-center gap-3 text-sm"><span class="text-gray-500 dark:text-gray-400 w-5 text-center">${icon}</span><span class="text-gray-800 dark:text-gray-200">${line}</span></div>`;
                         }).join('');
 
                         let notesContent = (entry.notes || []).length > 0 ? `<ul class="list-disc pl-4 text-sm text-gray-700 dark:text-gray-300 space-y-1">${entry.notes.map(note => `<li>${note.replace(/(https?:\/\/[^\s!"'<>()]+)/g, '<a href="$1" target="_blank" class="underline">$1</a>')}</li>`).join('')}</ul>` : '';
