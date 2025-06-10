@@ -2,6 +2,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/license/MIT)
 ![HTML](https://img.shields.io/badge/language-HTML-blue)
+[![GitHub issues](https://img.shields.io/github/issues/EliteGreyIT67/Universal-Pet-Microchip-Lookup-Tool)](https://github.com/EliteGreyIT67/Universal-Pet-Microchip-Lookup-Tool/issues)
+[![GitHub forks](https://img.shields.io/github/forks/EliteGreyIT67/Universal-Pet-Microchip-Lookup-Tool)](https://github.com/EliteGreyIT67/Universal-Pet-Microchip-Lookup-Tool/network)
+[![GitHub stars](https://img.shields.io/github/stars/EliteGreyIT67/Universal-Pet-Microchip-Lookup-Tool)](https://github.com/EliteGreyIT67/Universal-Pet-Microchip-Lookup-Tool/stargazers)
 
 ---
 
@@ -16,6 +19,11 @@ The core data for this tool is transcribed from the “[MICROCHIP FORMAT GUIDE](
 > **IMPORTANT DISCLAIMER:**  
 > This tool does **not** check live pet registration databases and **cannot** provide any pet owner information. It only suggests the likely manufacturer or brand associated with a microchip number.  
 > **Always use official resources and the "Advanced Help" section for a complete owner lookup.**
+
+---
+
+![Application Screenshot](https://imgur.com/79HgsZO.png)
+*A quick look at the Universal Pet Microchip Lookup Tool interface.*
 
 ---
 
@@ -39,25 +47,28 @@ The core data for this tool is transcribed from the “[MICROCHIP FORMAT GUIDE](
 
 ## How to Use
 
-1. **Access the Tool:**
-    - [Live Demo](#live-demo): Go to the provided URL.
-    - Or, clone/download this repository and open `index.html` in any modern web browser.
+1.  Navigate to the [live demo website](https://elitegreyit67.github.io/Universal-Pet-Microchip-Lookup-Tool/).
+2.  Enter the pet's microchip number into the input field.
+3.  Click the **"Lookup Microchip"** button.
+4.  The tool will generate links to check the microchip number on various pet recovery service websites.
+5.  Click the links to view the results on each respective site.
+   
+## 💻 Running Locally
 
-2. **Enter Microchip Number:**  
-   Type/paste the pet's microchip number (usually 9–15 alphanumeric characters). The tool automatically removes spaces, hyphens, or asterisks.
+To run this project on your local machine:
 
-3. **Lookup:**  
-   Click the “Lookup Manufacturer” button.
-
-4. **View Results:**  
-   The app displays:
-   - Potential manufacturer(s) or brand(s)
-   - Available contact info (phone, web, email)
-   - Important notes (e.g., “info if unenrolled”)
-   - A dedicated sidebar with direct links to official lookup registries.
-   - An "Advanced Help" section for dead-end or unregistered chips.
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/EliteGreyIT67/Universal-Pet-Microchip-Lookup-Tool.git
+    ```
+2.  **Navigate to the project directory:**
+    ```bash
+    cd Universal-Pet-Microchip-Lookup-Tool
+    ```
+3.  **Open the `index.html` file** in your favorite web browser.
 
 ---
+
 ## Example Usage
 
 | Microchip Number | Example Result                              |
@@ -72,8 +83,8 @@ The core data for this tool is transcribed from the “[MICROCHIP FORMAT GUIDE](
 
 ## Live Demo
 
-👉 **Try it now:**  
-https://elitegreyit67.github.io/Universal-Pet-Microchip-Lookup-Tool/
+You can try the tool live at:
+**[https://elitegreyit67.github.io/Universal-Pet-Microchip-Lookup-Tool/](https://elitegreyit67.github.io/Universal-Pet-Microchip-Lookup-Tool/)**
 
 ---
 
