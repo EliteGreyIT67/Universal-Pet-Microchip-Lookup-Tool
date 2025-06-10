@@ -309,7 +309,6 @@
         { name: "Petkey", urlTemplate: "http://petkey.org//microchip/lookup/{chip_id}", icon: "fas fa-key" },
         { name: "BuddyID", urlTemplate: "https://my.buddyid.com/results.php?key={chip_id}", icon: "fas fa-user-friends" },
         { name: "IDTag Pet Search", urlTemplate: "https://idtag.com/pet-search/?chip={chip_id}", icon: "fas fa-id-badge" },
-        { name: "IDTag Lookup", urlTemplate: "https://idtag.com/pet/{chip_id}", icon: "fas fa-id-card" },
         { name: "NanoChipID", urlTemplate: "https://www.nanochipid.com/lookup/{chip_id}", icon: "fas fa-microchip" },
         { name: "Petstablished", urlTemplate: "https://petstablished.com/microchip_lookup/{chip_id}", icon: "fas fa-shield-alt" },
         { name: "FreePetChipRegistry", urlTemplate: "https://www.freepetchipregistry.com/found-pet?chip={chip_id}", icon: "fas fa-database" }
@@ -317,8 +316,9 @@
 
     // --- Data load (embedded) ---
     function loadMicrochipData() {
-        // UPDATED: Added websites and updated contact info based on user request.
+        // UPDATED: Added new prefixes and aliases
         const embeddedMicrochipData = [
+            {"prefix":"840","entries":[{"brand":"USDA Animal Tracking","notes":["Prefix reserved for US official animal tracking. May not be a pet chip."]}]},
             {"prefix":"900","entries":[{"brand":"ACA MARRS","manufacturerWebsite":"https://www.marrsmicrochip.com","contacts":[{"type":"phone","value":"800-992-0571"},{"type":"web","value":"https://www.marrsmicrochip.com"}],"notes":["Prefix for chips not otherwise listed. No info if unenrolled."]}]},
             {"prefix":"900032","entries":[{"brand":"UNKNOWN","notes":["Mystery chip. Can try Get Me Known (getmeknown.co.za)."]}]},
             {"prefix":"900074","entries":[{"brand":"SMART TAG (ID Tag)","manufacturerWebsite":"https://idtag.com","contacts":[{"type":"phone","value":"201-537-5644"},{"type":"phone","text":"24/7 Hotline","value":"888-521-0808"},{"type":"phone","text":"Support","value":"866-603-6863"},{"type":"email","value":"support@idtag.com"},{"type":"web","value":"https://idtag.com"}],"notes":["Info if unenrolled."]}]},
@@ -327,6 +327,7 @@
             {"prefix":"900111","entries":[{"brand":"INTERNATIONAL PET REGISTRY (IPR)","contacts":[{"type":"phone","value":"844-477-7387"}],"notes":["Info if unenrolled, but manufacturer may sell direct to consumer."]}]},
             {"prefix":"900113","_aliasFor":"900111"},
             {"prefix":"900115","_aliasFor":"900111"},
+            {"prefix":"900116","_aliasFor":"900111"},
             {"prefix":"900118","_aliasFor":"900111"},
             {"prefix":"900139","_aliasFor":"900074"},
             {"prefix":"900164","entries":[{"brand":"SAVE THIS LIFE / Multiple Vendors","contacts":[{"type":"phone","value":"855-777-2447"}]}]},
@@ -334,6 +335,8 @@
             {"prefix":"900223","entries":[{"brand":"Get Me Known","manufacturerWebsite":"https://www.getmeknown.co.za/"},{"brand":"Five Star ID","manufacturerWebsite":"https://www.fivestarid.co.za/"}]},
             {"prefix":"900235","entries":[{"brand":"Fi Nano","manufacturerWebsite":"https://nano.tryfi.com/","contacts":[{"type":"phone","value":"1-888-434-3647","text":"Fi Nano Support"},{"type":"phone","value":"855-626-6817","text":"Fi Collar Support"},{"type":"web","value":"https://nano.tryfi.com/"}]}]},
             {"prefix":"900250","entries":[{"brand":"FURREKA","manufacturerWebsite":"https://furreka.com","contacts":[{"type":"phone","value":"844-387-7352"},{"type":"web","value":"https://furreka.com"}]}]},
+            {"prefix":"900258","entries":[{"brand":"Vethub","manufacturerWebsite":"https://vethub.com.au","contacts":[{"type":"web","value":"https://vethub.com.au"}],"notes":["AUSTRALIA"]}]},
+            {"prefix":"900262","entries":[{"brand":"Homeward Bound","manufacturerWebsite":"https://www.homewardbound.com/","contacts":[{"type":"phone","value":"800-434-2843"}],"notes":["Linked to Buddy ID."]}]},
             {"prefix":"901017","entries":[{"brand":"UI Devices","contacts":[{"type":"phone","value":"224-444-8484"}]}]},
             {"prefix":"911","entries":[{"brand":"911PETCHIP / FREE PET CHIP REGISTRY","manufacturerWebsite":"https://www.freepetchipregistry.com","contacts":[{"type":"phone","text":"Lost Pet Recovery","value":"888-546-7615"},{"type":"web","value":"https://www.freepetchipregistry.com"},{"type":"web","value":"https://911petchip.com"},{"type":"email","value":"admin@911petchip.com"}],"notes":["Info if unenrolled."]}]},
             {"prefix":"927","entries":[{"brand":"Flucky (Humanada S.A. de C.V.)","contacts":[{"type":"phone","value":"+52 614 142 6826"},{"type":"email","value":"info@flucky.com.mx"}],"notes":["MEXICO"]}]},
@@ -342,25 +345,35 @@
             {"prefix":"939","entries":[{"brand":"MICROCHIP 4 SOLUTIONS","contacts":[{"type":"phone","value":"877-738-4384"}]},{"brand":"Electrinet (MEXICO)","notes":["sells to FCM.mx"]}]},
             {"prefix":"941","entries":[{"brand":"PETKEY","manufacturerWebsite":"https://www.petkey.org","contacts":[{"type":"phone","value":"866-699-3463"},{"type":"web","value":"https://www.petkey.org"},{"type":"phone","text":"Lost Pet Support","value":"734-600-3463"}]},{"brand":"24PETWATCH","manufacturerWebsite":"https://www.24petwatch.com","contacts":[{"type":"phone","text":"General Inquiries / Lost Pet","value":"866-597-2424"},{"type":"web","value":"https://www.24petwatch.com"},{"type":"email","text":"Media Inquiry","value":"marketing@pethealthinc.com"}]}]},
             {"prefix":"944","entries":[{"brand":"Micro-ID (UK)","manufacturerWebsite":"http://www.iso-944.com/"}]},
+            {"prefix":"945","entries":[{"brand":"Pet-ID (UK)","manufacturerWebsite":"https://www.pet-id.net/","contacts":[{"type":"phone","value":"+44 1243 825438"}],"notes":["UK based."]}]},
             {"prefix":"952","entries":[{"brand":"MICROCHIP 4 SOLUTIONS","contacts":[{"type":"phone","value":"877-738-4384"}]}]},
             {"prefix":"953","entries":[{"brand":"Virbac BackHome","manufacturerWebsite":"https://findmychip.co.za/"}]},
             {"prefix":"956","entries":[{"brand":"AKC Reunite","manufacturerWebsite":"https://www.akcreunite.org","contacts":[{"type":"phone","value":"800-252-7894"},{"type":"web","value":"https://www.akcreunite.org"}]}]},
+            {"prefix":"958","entries":[{"brand":"Pet Chip Registry","manufacturerWebsite":"https://www.petchipregistry.com/","contacts":[{"type":"phone","value":"866-211-9582"}]}]},
             {"prefix":"963084","entries":[{"brand":"Saving-Life","contacts":[{"type":"phone","value":"888-577-7938"}]}]},
             {"prefix":"965","_aliasFor":"933"},
+            {"prefix":"966","entries":[{"brand":"Global Pet Security","manufacturerWebsite":"https://www.gps.pet/","notes":["No info if unenrolled."]}]},
             {"prefix":"967","entries":[{"brand":"IDENTRAC","contacts":[{"type":"email","value":"info@identrac.ca"}]}]},
             {"prefix":"968","entries":[{"brand":"SAINT (PET PARENT)","contacts":[{"type":"email","value":"info@aapp-pets.org"}]},{"brand":"French Canadian aZoo.me","contacts":[{"type":"email","value":"info@aZoo.me"}]},{"brand":"Saving-Life","contacts":[{"type":"phone","value":"888-577-7938"}]}]},
+            {"prefix":"972","entries":[{"brand":"K9 REG (Canada)","manufacturerWebsite":"https://k9reg.com/","notes":["CANADA based."]}]},
             {"prefix":"977","entries":[{"brand":"AVID","contacts":[{"type":"phone","value":"800-336-2843"}]}]},
             {"prefix":"978","entries":[{"brand":"Virbac BackHome","manufacturerWebsite":"https://findmychip.co.za/"}]},
+            {"prefix":"98100","entries":[{"brand":"Datamars / Temple Tag","notes":["Check europetnet.org and Petmaxx."]}]},
+            {"prefix":"981001","_aliasFor":"98102"},
             {"prefix":"981010","entries":[{"brand":"Banfield","contacts":[{"type":"phone","value":"800-838-6738"}]}]},
+            {"prefix":"981016","entries":[{"brand":"Be-Spotted","manufacturerWebsite":"https://be-spotted.com/","contacts":[{"type":"web","value":"https://be-spotted.com/"}]}]},
             {"prefix":"98102","entries":[{"brand":"PETLINK (Datamars)","manufacturerWebsite":"https://www.petlink.net","contacts":[{"type":"phone","value":"877-738-5465","text":"1-877-PETLINK"},{"type":"web","value":"https://www.petlink.net"}]},{"brand":"24PETWATCH","manufacturerWebsite":"https://www.24petwatch.com","contacts":[{"type":"phone","text":"General Inquiries / Lost Pet","value":"866-597-2424"},{"type":"web","value":"https://www.24petwatch.com"},{"type":"email","text":"Media Inquiry","value":"marketing@pethealthinc.com"}]}]},
+            {"prefix":"981020","entries":[{"brand":"EIDAP Inc.","manufacturerWebsite":"https://www.eidap.com/","contacts":[{"type":"phone","value":"888-346-8899"}],"notes":["CANADA based."]}]},
             {"prefix":"98103","_aliasFor":"98102"},
             {"prefix":"981100","entries":[{"brand":"Datamars or 'Dog ID'","notes":["Check europetnet.org and Petmaxx."]}]},
             {"prefix":"982","entries":[{"brand":"24PETWATCH","manufacturerWebsite":"https://www.24petwatch.com","contacts":[{"type":"phone","text":"General Inquiries / Lost Pet","value":"866-597-2424"},{"type":"web","value":"https://www.24petwatch.com"},{"type":"email","text":"Media Inquiry","value":"marketing@pethealthinc.com"}]}]},
+            {"prefix":"982126", "_aliasFor": "982"},
             {"prefix":"985","entries":[{"brand":"HOME AGAIN","manufacturerWebsite":"https://www.homeagain.com","contacts":[{"type":"phone","value":"888-466-3242"},{"type":"web","value":"https://www.homeagain.com"}],"notes":["985170... and 985191... are often test chips."]}]},
             {"prefix":"987","_aliasFor":"900074"},
             {"prefix":"990","entries":[{"brand":"NANOCHIPID.com","manufacturerWebsite":"https://www.nanochipid.com/","contacts":[{"type":"phone","value":"855-434-2447"},{"type":"web","value":"https://www.nanochipid.com"}],"notes":["Info if unenrolled."]},{"brand":"VIAGUARD","contacts":[{"type":"phone","value":"877-842-4827"}],"notes":["No info if unenrolled."]}]},
             {"prefix":"991","entries":[{"brand":"SAVE THIS LIFE","contacts":[{"type":"phone","value":"855-777-2447"}]},{"brand":"911PETCHIP / FREE PET CHIP REGISTRY","manufacturerWebsite":"https://www.freepetchipregistry.com","contacts":[{"type":"phone","text":"Lost Pet Recovery","value":"888-546-7615"},{"type":"web","value":"https://www.freepetchipregistry.com"},{"type":"web","value":"https://911petchip.com"}]},{"brand":"PEEVA","contacts":[{"type":"phone","value":"833-733-8226"}],"notes":["No info if unenrolled."]}]},
             {"prefix":"992","entries":[{"brand":"ACA MARRS","manufacturerWebsite":"https://www.marrsmicrochip.com","contacts":[{"type":"phone","value":"800-992-0571"},{"type":"web","value":"https://www.marrsmicrochip.com"}],"notes":["No info if unenrolled."]},{"brand":"INTERNATIONAL PET REGISTRY","contacts":[{"type":"phone","value":"844-477-7387"}]},{"brand":"NANOCHIPID.com","manufacturerWebsite":"https://www.nanochipid.com/","contacts":[{"type":"phone","value":"855-434-2447"},{"type":"web","value":"https://www.nanochipid.com"}]},{"brand":"PETKEY","manufacturerWebsite":"https://www.petkey.org","contacts":[{"type":"phone","value":"866-699-3463"},{"type":"web","value":"https://www.petkey.org"},{"type":"phone","text":"Lost Pet Support","value":"734-600-3463"}]},{"brand":"SMART TRAC","manufacturerWebsite":"PETMAXX.COM"},{"brand":"24 PETWATCH","manufacturerWebsite":"https://www.24petwatch.com","contacts":[{"type":"phone","text":"General Inquiries / Lost Pet","value":"866-597-2424"},{"type":"web","value":"https://www.24petwatch.com"}]}]},
+            {"prefix":"998","_aliasFor":"900085"},
             {"prefix":"999","entries":[{"brand":"Test Chips","notes":["Should not have been released. Report to andie@icar.org."]}]},
             {"prefix":"AVID9DIGIT","_isVirtual":true,"entries":[{"brand":"AVID (9-Digit)","manufacturerWebsite":"https://www.avidid.com/","contacts":[{"type":"phone","value":"800-336-2843"},{"type":"web","value":"https://www.avidid.com/"}],"chipTechnology":["125 kHz"]}]},
             {"prefix":"000","_aliasFor":"956"},
@@ -530,6 +543,21 @@
                     }
                 }
             }
+            
+            // Check for aliases if no primary match was found
+            if(matches.length === 0) {
+                for (const mfrData of resolvedManufacturersData) {
+                    if (!mfrData._aliasFor) continue;
+                    if (chipNumber.startsWith(mfrData.prefix)) {
+                       const aliasedMatch = aliasMap.get(mfrData.prefix);
+                       if(aliasedMatch) {
+                           matches.push(aliasedMatch);
+                           break;
+                       }
+                    }
+                }
+            }
+
 
             loader.style.display = 'none';
             resultsHeader.style.display = 'flex';
@@ -541,10 +569,7 @@
                 notFoundMessageDiv.style.display = 'none';
                 matches.forEach(match => {
                     let currentMatchData = match;
-                    // Resolve alias one level deep
-                    if (aliasMap.has(match.prefix)) {
-                        currentMatchData = aliasMap.get(match.prefix);
-                    }
+                    // Note: Aliases are already resolved before this loop in the new logic
                     
                     currentMatchData.entries.forEach(entry => {
                         let mainInfo = `<h2 class="text-2xl font-bold text-blue-800 dark:text-blue-300">${entry.brand}</h2>`;
