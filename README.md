@@ -39,6 +39,18 @@ You can use the tool live right now at:
 
 ---
 
+## Example Usage
+
+Here are a few examples of what the tool can identify. Try these in the demo!
+
+| Microchip Number | Expected Result from This Tool             |
+|------------------|--------------------------------------------|
+| `985112003627548`| **Manufacturer:** HomeAgain (Datamars, ISO)    |
+| `0A1234567`      | **Manufacturer:** AVID (10-digit)          |
+| `900012345678901`| **Note:** Unregistered "900" series ISO chip. Use AAHA lookup. |
+
+---
+
 ## 🆘 Critical Next Steps for a Found Pet
 
 If you have found a lost pet, use this tool to identify the chip company, then follow these steps:
@@ -138,3 +150,4 @@ Contributions are welcome!
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
