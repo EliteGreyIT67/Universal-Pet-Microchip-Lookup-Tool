@@ -6,11 +6,8 @@
     <title>Universal Pet Microchip Lookup</title>
     <meta name="description" content="Identify potential manufacturers or issuing companies of a pet's microchip based on its number format.">
     <link rel="icon" href="https://placehold.co/32x32/3b82f6/ffffff?text=🐾">
-    <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Inter font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         html, body {
@@ -45,7 +42,6 @@
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
     <main class="container mx-auto px-4 py-8">
-        <!-- Theme Toggle Button -->
         <div class="absolute top-4 right-4">
             <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
                 <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
@@ -53,7 +49,6 @@
             </button>
         </div>
 
-        <!-- Header/Branding -->
         <header class="text-center mb-10">
             <div class="flex justify-center items-center gap-3 mb-2">
                  <svg class="w-12 h-12 text-blue-700 dark:text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -64,13 +59,10 @@
             <p class="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl mx-auto">Quickly identify potential manufacturers for a pet's microchip. Designed for vet staff, shelters, and pet finders.</p>
         </header>
 
-        <!-- Main Content Area -->
         <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-8 max-w-7xl mx-auto">
             
-            <!-- Left Column: Search & Results -->
             <div class="lg:col-span-2">
                 <section class="bg-white dark:bg-gray-800 rounded-xl shadow-lg w-full p-6 md:p-8">
-                    <!-- Loading/Error states -->
                     <div id="dataLoadingMessage" class="flex items-center gap-2 text-blue-800 dark:text-blue-300 bg-blue-100 dark:bg-gray-700 border border-blue-300 dark:border-blue-500 rounded px-4 py-3 mb-4 text-base">
                         <i class="fas fa-spinner spin" aria-hidden="true"></i>
                         <span>Loading microchip data...</span>
@@ -80,7 +72,6 @@
                         <span>Error loading microchip data. Please try refreshing the page.</span>
                     </div>
 
-                    <!-- Input Area -->
                     <form id="lookupForm" autocomplete="off" class="flex flex-col gap-4" style="display:none;">
                         <label for="microchipNumber" class="font-semibold text-gray-700 dark:text-gray-300">
                             Enter Microchip Number <span class="text-gray-400 dark:text-gray-500">(9-15 chars)</span>
@@ -107,14 +98,11 @@
                         </button>
                     </form>
                     
-                    <!-- Results Area -->
                     <section id="resultsArea" class="fade-in mt-6" style="display:none;" aria-live="polite">
-                        <!-- Loader spinner for search -->
                         <div id="loader" class="flex items-center justify-center my-4" style="display:none;">
                             <span class="inline-block w-8 h-8 border-4 border-blue-100 dark:border-blue-800 border-t-blue-700 dark:border-t-blue-500 rounded-full spin"></span>
                         </div>
                         
-                        <!-- Header for results -->
                         <div id="resultsHeader" style="display:none;" class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
                             <div>
                                 <span class="text-gray-500 dark:text-gray-400">Results for</span>
@@ -133,10 +121,8 @@
                             <span></span>
                         </div>
                         
-                        <!-- Manufacturer Info -->
                         <div id="chipInfoOutput"></div>
                         
-                        <!-- Not Found Message -->
                         <div id="notFoundMessage" class="bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-700 p-4 rounded-lg mt-4" style="display:none;">
                             <p class="font-bold text-lg mb-2 text-gray-900 dark:text-gray-100">No Manufacturer Match Found</p>
                             <p class="mb-3 text-gray-700 dark:text-gray-300">Our database does not have a matching prefix for this chip. This does not mean the chip is invalid or unregistered.</p>
@@ -153,7 +139,6 @@
                         </div>
                     </section>
 
-                    <!-- Advanced Help Section -->
                     <section id="advancedHelpSection" class="mt-8 fade-in" style="display: none;">
                         <div class="bg-teal-50 dark:bg-teal-900/30 border-l-4 border-teal-500 text-teal-800 dark:text-teal-200 p-4 rounded-r-lg">
                             <div class="flex">
@@ -204,10 +189,8 @@
                 </section>
             </div>
 
-            <!-- Right Column: Sidebar -->
             <aside id="sidebar" class="lg:col-span-1 mt-8 lg:mt-0 fade-in" style="display: none;">
                 <div class="sidebar-sticky space-y-6">
-                    <!-- Direct Lookup Links -->
                     <section id="directLookupLinksArea" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
                         <h2 class="text-lg font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2 mb-2">
                             <i class="fas fa-external-link-alt text-gray-500 dark:text-gray-400" aria-hidden="true"></i>
@@ -217,7 +200,6 @@
                         <ul id="directLookupList" class="flex flex-col gap-2"></ul>
                     </section>
                     
-                    <!-- Important Info Box -->
                     <section class="bg-indigo-50 dark:bg-indigo-900/40 border border-indigo-200 dark:border-indigo-800 rounded-lg p-4 text-indigo-900 dark:text-indigo-200 text-sm">
                         <strong>Important:</strong> This tool provides potential manufacturer information based on prefixes only. For actual pet registration details and to find an owner, you <b>must</b> check official registries.
                         <div class="mt-1">
@@ -228,13 +210,11 @@
             </aside>
         </div>
 
-        <!-- Footer -->
         <footer class="mt-12 text-gray-500 dark:text-gray-400 text-xs text-center">
             &copy; 2025 Universal Pet Microchip Lookup Tool. Not affiliated with any registry or manufacturer.
         </footer>
     </main>
 
-    <!-- Script -->
     <script>
     // --- Theme Toggle ---
     const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
@@ -319,7 +299,7 @@
         // UPDATED: Added new prefixes and aliases
         const embeddedMicrochipData = [
             {"prefix":"840","entries":[{"brand":"USDA Animal Tracking","notes":["Prefix reserved for US official animal tracking. May not be a pet chip."]}]},
-            {"prefix":"900","entries":[{"brand":"ACA MARRS","manufacturerWebsite":"https://www.marrsmicrochip.com","contacts":[{"type":"phone","value":"800-992-0571"},{"type":"web","value":"https://www.marrsmicrochip.com"}],"notes":["Prefix for chips not otherwise listed. No info if unenrolled."]}]},
+            {"prefix":"900","entries":[{"brand":"ACA MARRS","manufacturerWebsite":"https://www.marrsmicrochip.com","contacts":[{"type":"phone","value":"800-992-0571"},{"type":"web","value":"https://www.marrsmicrochip.com"}],"notes":["Prefix for chips not otherwise listed. No info if unenrolled.","The 900 prefix is a shared code used by hundreds of smaller or international manufacturers, making them very difficult to trace if unregistered."]}]},
             {"prefix":"900032","entries":[{"brand":"UNKNOWN","notes":["Mystery chip. Can try Get Me Known (getmeknown.co.za)."]}]},
             {"prefix":"900074","entries":[{"brand":"SMART TAG (ID Tag)","manufacturerWebsite":"https://idtag.com","contacts":[{"type":"phone","value":"201-537-5644"},{"type":"phone","text":"24/7 Hotline","value":"888-521-0808"},{"type":"phone","text":"Support","value":"866-603-6863"},{"type":"email","value":"support@idtag.com"},{"type":"web","value":"https://idtag.com"}],"notes":["Info if unenrolled."]}]},
             {"prefix":"900085","entries":[{"brand":"PETSTABLISHED","manufacturerWebsite":"https://petstablished.com","contacts":[{"type":"phone","value":"855-684-3184 ext 3"},{"type":"email","value":"support@petstablished.com"},{"type":"web","value":"https://petstablished.com"}]},{"brand":"HOMEWARDBOUND","contacts":[{"type":"phone","value":"844-643-4663"}]},{"brand":"ONLINE AMAZON","manufacturerWebsite":"REXID-PET.COM"}]},
@@ -342,22 +322,24 @@
             {"prefix":"927","entries":[{"brand":"Flucky (Humanada S.A. de C.V.)","contacts":[{"type":"phone","value":"+52 614 142 6826"},{"type":"email","value":"info@flucky.com.mx"}],"notes":["MEXICO"]}]},
             {"prefix":"932","entries":[{"brand":"LAMBERT VET SUPPLY (ADEQID)","notes":["No registry kept."]}]},
             {"prefix":"933","entries":[{"brand":"BUDDY ID (Microchip ID Systems)","manufacturerWebsite":"https://buddyid.com","contacts":[{"type":"phone","value":"800-434-2843"},{"type":"web","value":"https://buddyid.com"}],"notes":["Info if unenrolled. 933007125056789 is a test chip."]},{"brand":"Get Me Known","manufacturerWebsite":"https://www.getmeknown.co.za/"}]},
-            {"prefix":"939","entries":[{"brand":"MICROCHIP 4 SOLUTIONS","contacts":[{"type":"phone","value":"877-738-4384"}]},{"brand":"Electrinet (MEXICO)","notes":["sells to FCM.mx"]}]},
+            {"prefix":"939","entries":[{"brand":"RealTrace","manufacturerWebsite":"https://www.realtrace.com/en/","notes":["INTERNATIONAL (Europe). May not have a North American recovery database."]}]},
+            {"prefix":"941","entries":[{"brand":"Felixcan","manufacturerWebsite":"https://www.felixcan.com/eng/Id_Elec.html","contacts":[{"type":"phone","value":"+34 967 52 01 87"}],"notes":["INTERNATIONAL (Spain). Unlikely to be registered in US databases."]}]},
             {"prefix":"941","entries":[{"brand":"PETKEY","manufacturerWebsite":"https://www.petkey.org","contacts":[{"type":"phone","value":"866-699-3463"},{"type":"web","value":"https://www.petkey.org"},{"type":"phone","text":"Lost Pet Support","value":"734-600-3463"}]},{"brand":"24PETWATCH","manufacturerWebsite":"https://www.24petwatch.com","contacts":[{"type":"phone","text":"General Inquiries / Lost Pet","value":"866-597-2424"},{"type":"web","value":"https://www.24petwatch.com"},{"type":"email","text":"Media Inquiry","value":"marketing@pethealthinc.com"}]}]},
-            {"prefix":"944","entries":[{"brand":"Micro-ID (UK)","manufacturerWebsite":"http://www.iso-944.com/"}]},
-            {"prefix":"945","entries":[{"brand":"Pet-ID (UK)","manufacturerWebsite":"https://www.pet-id.net/","contacts":[{"type":"phone","value":"+44 1243 825438"}],"notes":["UK based."]}]},
+            {"prefix":"944","entries":[{"brand":"Micro-ID (UK)","manufacturerWebsite":"http://www.iso-944.com/","notes":["INTERNATIONAL (UK). Unlikely to be registered in US databases."]}]},
+            {"prefix":"945","entries":[{"brand":"Pet-ID (UK)","manufacturerWebsite":"https://www.pet-id.net/","contacts":[{"type":"phone","value":"+44 1243 825438"}],"notes":["INTERNATIONAL (UK). Unlikely to be registered in US databases."]}]},
             {"prefix":"952","entries":[{"brand":"MICROCHIP 4 SOLUTIONS","contacts":[{"type":"phone","value":"877-738-4384"}]}]},
-            {"prefix":"953","entries":[{"brand":"Virbac BackHome","manufacturerWebsite":"https://findmychip.co.za/"}]},
+            {"prefix":"953","entries":[{"brand":"Virbac BackHome","manufacturerWebsite":"https://www.backhome.co.za/","contacts":[{"type":"phone","value":"+27 11 027 8837"},{"type":"email","value":"backhome@virbac.co.za"}],"notes":["INTERNATIONAL (South Africa). Unlikely to be registered in US databases."]}]},
             {"prefix":"956","entries":[{"brand":"AKC Reunite","manufacturerWebsite":"https://www.akcreunite.org","contacts":[{"type":"phone","value":"800-252-7894"},{"type":"web","value":"https://www.akcreunite.org"}]}]},
             {"prefix":"958","entries":[{"brand":"Pet Chip Registry","manufacturerWebsite":"https://www.petchipregistry.com/","contacts":[{"type":"phone","value":"866-211-9582"}]}]},
+            {"prefix":"963","entries":[{"brand":"Animalltag","manufacturerWebsite":"https://animalltag.com.br/en/","contacts":[{"type":"phone","value":"+55 16 3362-3362"}],"notes":["INTERNATIONAL (Brazil). Unlikely to be registered in US databases."]}]},
             {"prefix":"963084","entries":[{"brand":"Saving-Life","contacts":[{"type":"phone","value":"888-577-7938"}]}]},
             {"prefix":"965","_aliasFor":"933"},
             {"prefix":"966","entries":[{"brand":"Global Pet Security","manufacturerWebsite":"https://www.gps.pet/","notes":["No info if unenrolled."]}]},
-            {"prefix":"967","entries":[{"brand":"IDENTRAC","contacts":[{"type":"email","value":"info@identrac.ca"}]}]},
+            {"prefix":"967","entries":[{"brand":"IDENTRAC","contacts":[{"type":"email","value":"info@identrac.ca"}]},{"brand":"EasyTrac-ID","manufacturerWebsite":"https://easytrac-id.com/","notes":["INTERNATIONAL (Europe). Unlikely to be registered in US databases."]}]},
             {"prefix":"968","entries":[{"brand":"SAINT (PET PARENT)","contacts":[{"type":"email","value":"info@aapp-pets.org"}]},{"brand":"French Canadian aZoo.me","contacts":[{"type":"email","value":"info@aZoo.me"}]},{"brand":"Saving-Life","contacts":[{"type":"phone","value":"888-577-7938"}]}]},
-            {"prefix":"972","entries":[{"brand":"K9 REG (Canada)","manufacturerWebsite":"https://k9reg.com/","notes":["CANADA based."]}]},
+            {"prefix":"972","entries":[{"brand":"K9 REG (Canada)","manufacturerWebsite":"https://k9reg.com/","notes":["CANADA based. Check Canadian registries."]}]},
             {"prefix":"977","entries":[{"brand":"AVID","contacts":[{"type":"phone","value":"800-336-2843"}]}]},
-            {"prefix":"978","entries":[{"brand":"Virbac BackHome","manufacturerWebsite":"https://findmychip.co.za/"}]},
+            {"prefix":"978","_aliasFor":"953"},
             {"prefix":"98100","entries":[{"brand":"Datamars / Temple Tag","notes":["Check europetnet.org and Petmaxx."]}]},
             {"prefix":"981001","_aliasFor":"98102"},
             {"prefix":"981010","entries":[{"brand":"Banfield","contacts":[{"type":"phone","value":"800-838-6738"}]}]},
@@ -370,9 +352,12 @@
             {"prefix":"982126", "_aliasFor": "982"},
             {"prefix":"985","entries":[{"brand":"HOME AGAIN","manufacturerWebsite":"https://www.homeagain.com","contacts":[{"type":"phone","value":"888-466-3242"},{"type":"web","value":"https://www.homeagain.com"}],"notes":["985170... and 985191... are often test chips."]}]},
             {"prefix":"987","_aliasFor":"900074"},
+            {"prefix":"988","entries":[{"brand":"Multiple / Unknown","notes":["This is a shared manufacturer code that may be difficult to trace. Check MyPetHQ.io for more info."]}]},
+            {"prefix":"989","entries":[{"brand":"Biomark Inc.","notes":["Primarily used for wildlife and conservation research. May not be enrolled in a public pet recovery database. You can try contacting MyPetHQ.io for assistance."]}]},
             {"prefix":"990","entries":[{"brand":"NANOCHIPID.com","manufacturerWebsite":"https://www.nanochipid.com/","contacts":[{"type":"phone","value":"855-434-2447"},{"type":"web","value":"https://www.nanochipid.com"}],"notes":["Info if unenrolled."]},{"brand":"VIAGUARD","contacts":[{"type":"phone","value":"877-842-4827"}],"notes":["No info if unenrolled."]}]},
             {"prefix":"991","entries":[{"brand":"SAVE THIS LIFE","contacts":[{"type":"phone","value":"855-777-2447"}]},{"brand":"911PETCHIP / FREE PET CHIP REGISTRY","manufacturerWebsite":"https://www.freepetchipregistry.com","contacts":[{"type":"phone","text":"Lost Pet Recovery","value":"888-546-7615"},{"type":"web","value":"https://www.freepetchipregistry.com"},{"type":"web","value":"https://911petchip.com"}]},{"brand":"PEEVA","contacts":[{"type":"phone","value":"833-733-8226"}],"notes":["No info if unenrolled."]}]},
             {"prefix":"992","entries":[{"brand":"ACA MARRS","manufacturerWebsite":"https://www.marrsmicrochip.com","contacts":[{"type":"phone","value":"800-992-0571"},{"type":"web","value":"https://www.marrsmicrochip.com"}],"notes":["No info if unenrolled."]},{"brand":"INTERNATIONAL PET REGISTRY","contacts":[{"type":"phone","value":"844-477-7387"}]},{"brand":"NANOCHIPID.com","manufacturerWebsite":"https://www.nanochipid.com/","contacts":[{"type":"phone","value":"855-434-2447"},{"type":"web","value":"https://www.nanochipid.com"}]},{"brand":"PETKEY","manufacturerWebsite":"https://www.petkey.org","contacts":[{"type":"phone","value":"866-699-3463"},{"type":"web","value":"https://www.petkey.org"},{"type":"phone","text":"Lost Pet Support","value":"734-600-3463"}]},{"brand":"SMART TRAC","manufacturerWebsite":"PETMAXX.COM"},{"brand":"24 PETWATCH","manufacturerWebsite":"https://www.24petwatch.com","contacts":[{"type":"phone","text":"General Inquiries / Lost Pet","value":"866-597-2424"},{"type":"web","value":"https://www.24petwatch.com"}]}]},
+            {"prefix":"993","entries":[{"brand":"Plastifran BV","manufacturerWebsite":"https://www.plastifran.nl/","notes":["INTERNATIONAL (Netherlands). Company primarily makes livestock identification and may not have a public pet recovery service."]}]},
             {"prefix":"998","_aliasFor":"900085"},
             {"prefix":"999","entries":[{"brand":"Test Chips","notes":["Should not have been released. Report to andie@icar.org."]}]},
             {"prefix":"AVID9DIGIT","_isVirtual":true,"entries":[{"brand":"AVID (9-Digit)","manufacturerWebsite":"https://www.avidid.com/","contacts":[{"type":"phone","value":"800-336-2843"},{"type":"web","value":"https://www.avidid.com/"}],"chipTechnology":["125 kHz"]}]},
@@ -575,7 +560,7 @@
                         let mainInfo = `<h2 class="text-2xl font-bold text-blue-800 dark:text-blue-300">${entry.brand}</h2>`;
                         if (entry.manufacturer && entry.manufacturer.toLowerCase() !== entry.brand.toLowerCase()) mainInfo += `<p class="text-gray-600 dark:text-gray-400 text-sm">by ${entry.manufacturer}</p>`;
                         if (entry.manufacturerWebsite) {
-                            const webLink = entry.manufacturerWebsite.startsWith('http') ? entry.manufacturerWebsite : `https://www.${entry.manufacturerWebsite.replace(/^https?:\/\//, '')}`;
+                            const webLink = entry.manufacturerWebsite.startsWith('http') ? entry.manufacturerWebsite : `https://${entry.manufacturerWebsite.replace(/^https?:\/\//, '')}`;
                             mainInfo += `<a href="${webLink}" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline text-sm flex items-center gap-1 mt-1">${entry.manufacturerWebsite} <i class="fas fa-external-link-alt fa-xs"></i></a>`;
                         }
                         if (entry.chipTechnology) mainInfo += `<div class="mt-2"><span class="bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 text-xs font-medium px-2.5 py-0.5 rounded-full">${Array.isArray(entry.chipTechnology) ? entry.chipTechnology.join(', ') : entry.chipTechnology}</span></div>`;
@@ -595,14 +580,14 @@
                                     displayValue = contact.text || contact.value;
                                     break;
                                 case 'web':
-                                    link = contact.value.startsWith('http') ? contact.value : `https://www.${contact.value.replace(/^https?:\/\//, '')}`;
+                                    link = contact.value.startsWith('http') ? contact.value : `https://www.${contact.value.replace(/^https?:\/\/(www\.)?/, '')}`;
                                     displayValue = contact.text || contact.value.replace(/^https?:\/\/(www\.)?/, '');
                                     break;
                                 default:
                                     link = '#';
                                     displayValue = contact.value;
                             }
-                            const line = `<a href="${link}" target="_blank" rel="noopener noreferrer" class="underline hover:text-blue-500">${displayValue}</a>`;
+                            const line = `<a href="${link}" ${contact.type !== 'email' ? 'target="_blank" rel="noopener noreferrer"' : ''} class="underline hover:text-blue-500">${displayValue}</a>`;
                             return `<div class="flex items-center gap-3 text-sm"><span class="text-gray-500 dark:text-gray-400 w-5 text-center">${icon}</span><span class="text-gray-800 dark:text-gray-200">${line}</span></div>`;
                         }).join('');
 
@@ -629,4 +614,3 @@
     </script>
 </body>
 </html>
-
