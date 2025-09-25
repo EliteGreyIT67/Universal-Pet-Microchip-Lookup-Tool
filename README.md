@@ -136,7 +136,7 @@ Contributions are welcome!
 - [ ] Convert to a Progressive Web App (PWA) for enhanced offline support.
 - [ ] Add internationalization (i18n) to support multiple languages.
 - [x] Theme toggle (dark/light mode).
-- [ ] Implement an optional external JSON data source for easier updates.
+- [x] Implement an optional external JSON data source for easier updates.
 
 ---
 
