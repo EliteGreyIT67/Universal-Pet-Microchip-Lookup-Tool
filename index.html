@@ -6,11 +6,8 @@
     <title>Universal Pet Microchip Lookup</title>
     <meta name="description" content="Identify potential manufacturers or issuing companies of a pet's microchip based on its number format.">
     <link rel="icon" href="https://placehold.co/32x32/3b82f6/ffffff?text=🐾">
-    <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Inter font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         html, body {
@@ -45,7 +42,6 @@
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
     <main class="container mx-auto px-4 py-8">
-        <!-- Theme Toggle Button -->
         <div class="absolute top-4 right-4">
             <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
                 <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
@@ -53,7 +49,6 @@
             </button>
         </div>
 
-        <!-- Header/Branding -->
         <header class="text-center mb-10">
             <div class="flex justify-center items-center gap-3 mb-2">
                  <svg class="w-12 h-12 text-blue-700 dark:text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -64,13 +59,10 @@
             <p class="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl mx-auto">Quickly identify potential manufacturers for a pet's microchip. Designed for vet staff, shelters, and pet finders.</p>
         </header>
 
-        <!-- Main Content Area -->
         <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-8 max-w-7xl mx-auto">
             
-            <!-- Left Column: Search & Results -->
             <div class="lg:col-span-2">
                 <section class="bg-white dark:bg-gray-800 rounded-xl shadow-lg w-full p-6 md:p-8">
-                    <!-- Loading/Error states -->
                     <div id="dataLoadingMessage" class="flex items-center gap-2 text-blue-800 dark:text-blue-300 bg-blue-100 dark:bg-gray-700 border border-blue-300 dark:border-blue-500 rounded px-4 py-3 mb-4 text-base">
                         <i class="fas fa-spinner spin" aria-hidden="true"></i>
                         <span>Loading microchip data...</span>
@@ -80,7 +72,6 @@
                         <span>Error loading microchip data. Please try refreshing the page.</span>
                     </div>
 
-                    <!-- Input Area -->
                     <form id="lookupForm" autocomplete="off" class="flex flex-col gap-4" style="display:none;">
                         <label for="microchipNumber" class="font-semibold text-gray-700 dark:text-gray-300">
                             Enter Microchip Number <span class="text-gray-400 dark:text-gray-500">(9-15 chars)</span>
@@ -107,14 +98,11 @@
                         </button>
                     </form>
                     
-                    <!-- Results Area -->
                     <section id="resultsArea" class="fade-in mt-6" style="display:none;" aria-live="polite">
-                        <!-- Loader spinner for search -->
                         <div id="loader" class="flex items-center justify-center my-4" style="display:none;">
                             <span class="inline-block w-8 h-8 border-4 border-blue-100 dark:border-blue-800 border-t-blue-700 dark:border-t-blue-500 rounded-full spin"></span>
                         </div>
                         
-                        <!-- Header for results -->
                         <div id="resultsHeader" style="display:none;" class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
                             <div>
                                 <span class="text-gray-500 dark:text-gray-400">Results for</span>
@@ -133,10 +121,8 @@
                             <span></span>
                         </div>
                         
-                        <!-- Manufacturer Info -->
                         <div id="chipInfoOutput"></div>
                         
-                        <!-- Not Found Message -->
                         <div id="notFoundMessage" class="bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-700 p-4 rounded-lg mt-4" style="display:none;">
                             <p class="font-bold text-lg mb-2 text-gray-900 dark:text-gray-100">No Manufacturer Match Found</p>
                             <p class="mb-3 text-gray-700 dark:text-gray-300">Our database does not have a matching prefix for this chip. This does not mean the chip is invalid or unregistered.</p>
@@ -153,7 +139,6 @@
                         </div>
                     </section>
 
-                    <!-- Advanced Help Section -->
                     <section id="advancedHelpSection" class="mt-8 fade-in" style="display: none;">
                         <div class="bg-teal-50 dark:bg-teal-900/30 border-l-4 border-teal-500 text-teal-800 dark:text-teal-200 p-4 rounded-r-lg">
                             <div class="flex">
@@ -204,10 +189,8 @@
                 </section>
             </div>
 
-            <!-- Right Column: Sidebar -->
             <aside id="sidebar" class="lg:col-span-1 mt-8 lg:mt-0 fade-in" style="display: none;">
                 <div class="sidebar-sticky space-y-6">
-                    <!-- Direct Lookup Links -->
                     <section id="directLookupLinksArea" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
                         <h2 class="text-lg font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2 mb-2">
                             <i class="fas fa-external-link-alt text-gray-500 dark:text-gray-400" aria-hidden="true"></i>
@@ -217,7 +200,6 @@
                         <ul id="directLookupList" class="flex flex-col gap-2"></ul>
                     </section>
                     
-                    <!-- Important Info Box -->
                     <section class="bg-indigo-50 dark:bg-indigo-900/40 border border-indigo-200 dark:border-indigo-800 rounded-lg p-4 text-indigo-900 dark:text-indigo-200 text-sm">
                         <strong>Important:</strong> This tool provides potential manufacturer information based on prefixes only. For actual pet registration details and to find an owner, you <b>must</b> check official registries.
                         <div class="mt-1">
@@ -228,13 +210,11 @@
             </aside>
         </div>
 
-        <!-- Footer -->
         <footer class="mt-12 text-gray-500 dark:text-gray-400 text-xs text-center">
             &copy; 2025 Universal Pet Microchip Lookup Tool. Not affiliated with any registry or manufacturer.
         </footer>
     </main>
 
-    <!-- Script -->
     <script>
     // --- Theme Toggle ---
     const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
@@ -315,9 +295,9 @@
     ];
 
     // --- Data load (embedded) ---
-    function loadMicrochipData() {
+    function getEmbeddedMicrochipData() {
         // UPDATED: Added new prefixes and aliases
-        const embeddedMicrochipData = [
+        return [
             {"prefix":"840","entries":[{"brand":"USDA Animal Tracking","notes":["Prefix reserved for US official animal tracking. May not be a pet chip."]}]},
             {"prefix":"900","entries":[{"brand":"ACA MARRS","manufacturerWebsite":"https://www.marrsmicrochip.com","contacts":[{"type":"phone","value":"800-992-0571"},{"type":"web","value":"https://www.marrsmicrochip.com"}],"notes":["Prefix for chips not otherwise listed. No info if unenrolled.","The 900 prefix is a shared code used by hundreds of smaller or international manufacturers, making them very difficult to trace if unregistered."]}]},
             {"prefix":"900032","entries":[{"brand":"UNKNOWN","notes":["Mystery chip. Can try Get Me Known (getmeknown.co.za)."]}]},
@@ -395,32 +375,42 @@
             {"prefix":"9A1","_aliasFor":"982"},
             {"prefix":"TR","_aliasFor":"956"}
         ];
-        
+    }
+    
+    function processData(data) {
+        manufacturersData = data;
+        manufacturersData.forEach(item => {
+            if (item._aliasFor) {
+                const target = manufacturersData.find(targetItem => targetItem.prefix === item._aliasFor);
+                if (target) aliasMap.set(item.prefix, target);
+            }
+        });
+        resolvedManufacturersData = [...manufacturersData].sort((a, b) => {
+            const lenA = a.prefix === "AVID9DIGIT" ? 9.5 : a.prefix.length;
+            const lenB = b.prefix === "AVID9DIGIT" ? 9.5 : b.prefix.length;
+            if (lenB !== lenA) return lenB - lenA;
+            if (typeof a.prefix === 'string' && typeof b.prefix === 'string') {
+                if (a.prefix.match(/^[A-Z]+$/) && b.prefix.match(/^\d+$/)) return -1;
+                if (a.prefix.match(/^\d+$/) && b.prefix.match(/^[A-Z]+$/)) return 1;
+            }
+            return 0;
+        });
+        dataLoadingMessage.style.display = 'none';
+        lookupForm.style.display = 'flex';
+    }
+    
+    async function loadMicrochipData() {
         try {
-            manufacturersData = embeddedMicrochipData;
-            manufacturersData.forEach(item => {
-                if (item._aliasFor) {
-                    const target = manufacturersData.find(targetItem => targetItem.prefix === item._aliasFor);
-                    if (target) aliasMap.set(item.prefix, target);
-                }
-            });
-            resolvedManufacturersData = [...manufacturersData].sort((a, b) => {
-                const lenA = a.prefix === "AVID9DIGIT" ? 9.5 : a.prefix.length; 
-                const lenB = b.prefix === "AVID9DIGIT" ? 9.5 : b.prefix.length;
-                if (lenB !== lenA) return lenB - lenA;
-                if (typeof a.prefix === 'string' && typeof b.prefix === 'string') {
-                    if (a.prefix.match(/^[A-Z]+$/) && b.prefix.match(/^\d+$/)) return -1;
-                    if (a.prefix.match(/^\d+$/) && b.prefix.match(/^[A-Z]+$/)) return 1;
-                }
-                return 0;
-            });
-            dataLoadingMessage.style.display = 'none';
-            lookupForm.style.display = 'flex';
+            const response = await fetch('microchip_data.json');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            processData(data);
         } catch (error) {
-            console.error("Failed to process microchip data:", error);
-            dataLoadingMessage.style.display = 'none';
-            dataErrorMessage.style.display = 'flex';
-            dataErrorMessage.querySelector("span").textContent = `Error processing embedded microchip data: ${error.message}.`;
+            console.warn("Could not load external JSON data. Falling back to embedded data.", error);
+            const embeddedData = getEmbeddedMicrochipData();
+            processData(embeddedData);
         }
     }
 
